@@ -77,9 +77,9 @@
                         <div class="ms-3 modalEditMainBody">
                             <div class="editModalContent mx-auto">
                                 <div class="text-center">
-                                    <div class="contactEditModalHead mx-auto">EDIT CONTACT</div>
+                                    <div class="contactEditModalHead mx-auto" id="createContactHead">CREATE CONTACT</div>
                                 </div>
-                                <form action="" method="">
+                                <form action="" method="POST" enctype="multipart/form-data">
                                     <div>
                                         <div class="mb-3 personalDetailsHead">Personal Contact</div>
                                     </div>
@@ -90,17 +90,20 @@
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <select name="" id="" class="editContactPersonalInput">
+                                            <select name="selectTitle" id="selectTitleId" class="editContactPersonalInput">
                                                 <option value="" selected hidden></option>
                                                 <option value="Mr">Mr</option>
                                                 <option value="Ms">Ms</option>
                                             </select>
+                                             <div id="titleWarning" class="registerWarning"></div>
                                         </div>
                                         <div>
-                                            <input class="editContactPersonalInput" placeholder="Your First Name" type="text">
+                                            <input name="firstName" id="firstNameId" class="editContactPersonalInput" placeholder="First Name" type="text">
+                                            <div id="firstWarning" class="registerWarning"></div>
                                         </div>
                                         <div>
-                                            <input class="editContactPersonalInput" placeholder="Your Lat Name" type="text">
+                                            <input name="lastName" id="lastNameId" class="editContactPersonalInput" placeholder="Last Name" type="text">
+                                            <div id="lastWarning" class="registerWarning"></div>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between mb-3 mt-3">
@@ -109,58 +112,98 @@
                                     </div>
                                     <div class="d-flex justify-content-between mb-3">
                                         <div>
-                                            <select name="" id="" class="editContactPersonalInput">
+                                            <select name="selectGender" id="selectGenderId" class="editContactPersonalInput">
                                                 <option value="" selected hidden></option>
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>
+                                            <div id="genderWarning" class="registerWarning"></div>
                                         </div>
                                         <div>
-                                            <input class="editContactPersonalInput" type="date">
+                                            <input name="dob" id="dobId" class="editContactPersonalInput" type="date">
+                                            <div id="dateWarning" class="registerWarning"></div>
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="mb-2 createContactFields">Upload Photo <span>*</span></div>
+                                        <div class="mb-2 createContactFields">Upload Photo </div>
                                     </div>
                                     <div>
-                                        <input class="editContactPersonalInputFile" type="file">
+                                        <input name="profilePic" id="profilePicId" class="editContactPersonalInputFile" type="file">
+                                        <div id="picWarning" class="registerWarning"></div>
                                     </div>
                                     <div>
                                         <div class="mb-3 mt-2 personalDetailsHead">Contact Details</div>
                                     </div>
                                     <div class="d-flex justify-content-between mb-3 mt-3">
                                         <div class="createContactFields">Address<span>*</span></div>
-                                        <div class="createContactFields me-5">Street <span>*</span></div>
+                                        <div class="createContactFields">Street <span>*</span></div>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <input class="editContactPersonalInput" placeholder="Your Address" type="text">
+                                            <input name="address" id="addressId" class="editContactPersonalInput" placeholder="Address" type="text">
+                                            <div id="addressWarning" class="registerWarning"></div>
                                         </div>
                                         <div>
-                                            <input class="editContactPersonalInput" placeholder="Your Street Name" type="text">
+                                            <input name="street" id="sreetId" class="editContactPersonalInput" placeholder="Street Name" type="text">
+                                            <div id="streetWarning" class="registerWarning"></div>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between mb-3 mt-3">
-                                        <div class="createContactFields">Address<span>*</span></div>
-                                        <div class="createContactFields me-5">Street <span>*</span></div>
+                                        <div class="createContactFields">District <span>*</span></div>
+                                        <div class="createContactFields">State <span>*</span></div>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <input class="editContactPersonalInput" placeholder="Your Address" type="text">
+                                            <input name="district" id="districtId"  class="editContactPersonalInput" placeholder="District" type="text">
+                                            <div id="districtWarning" class="registerWarning"></div>
                                         </div>
                                         <div>
-                                            <input class="editContactPersonalInput" placeholder="Your Street Name" type="text">
+                                            <input name="state" id="stateId" class="editContactPersonalInput" placeholder="State" type="text">
+                                            <div id="stateWarning" class="registerWarning"></div>
                                         </div>
                                     </div>
+                                    <div class="d-flex justify-content-between mb-3 mt-3">
+                                         <div class="createContactFields me-5">Country <span>*</span></div>
+                                        <div class="createContactFields me-5">Pincode <span>*</span></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <input name="country" id="countryId" class="editContactPersonalInput" placeholder="Country" type="text">
+                                            <div id="countryWarning" class="registerWarning"></div>
+                                        </div>
+                                        <div>
+                                            <input name="pincode" id="pincodeId" class="editContactPersonalInput" placeholder="Pin-Code" type="text">
+                                            <div id="pincodeWarning" class="registerWarning"></div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3 mt-3">
+                                        <div class="createContactFields me-5">Email Id <span>*</span></div>
+                                        <div class="createContactFields me-5">Phone <span>*</span></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <input name="emailId" id="emailIds" class="editContactPersonalInput" placeholder="Email Id" type="text">
+                                            <div id="emailWarning" class="registerWarning"></div>
+                                        </div>
+                                        <div>
+                                            <input name="phone" id="phoneId" class="editContactPersonalInput" placeholder="Phone" type="text">
+                                            <div id="phoneWarning" class="registerWarning"></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button onclick="return addContact()" type="submit" name="createSubmit" class="modalBtnClose">SUBMIT</button>
+                                    </div>
                                 </form>
-                                <div class="text-center">
-                                    <button type="button py-3" class="modalBtnClose " data-bs-dismiss="modal" aria-label="Close">CLOSE</button>
-                                </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center w-25 pt-5">
-                            <div class="">
-                                <img height="100" class="mt-5" src="./Assets/Images/addressProfilePic.jpeg" alt="">
+                        <div class="w-25">
+                            <div class="d-flex justify-content-end mt-4">
+                                <button class="btn btn-close"  class="modalBtnClose " data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="d-flex justify-content-center w-100 pt-5">
+                                <div class="w-100">
+                                    <img height="100" class="mt-5 ms-5" src="./Assets/Images/addressProfilePic.jpeg" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -191,7 +234,7 @@
                         <div class="text-center profileBox">
                             <img width="100" src="./Assets/Images/profileImage.png" alt="">
                             <div class="profileUserName">Name</div>
-                            <button class="rounded-pill createContactbutton px-1 py-1">CREATE CONTACT</button>
+                            <button   data-bs-toggle="modal" onclick="createContact()" data-bs-target="##staticBackdropEdit" class="rounded-pill createContactbutton px-1 py-1">CREATE CONTACT</button>
                         </div>
                     </div>
                     <div class="userAddedContacts px-2">
@@ -205,7 +248,7 @@
                             <div class="eachContactName">name</div>
                             <div class="eachContactMail">email@gmail.com</div>
                             <div class="eachContactNumber">000000000</div>
-                            <button class="eachContactButton"  data-bs-toggle="modal" data-bs-target="##staticBackdropEdit">EDIT</button>
+                            <button class="eachContactButton"  type="button" onclick="editContact()"  data-bs-toggle="modal"  data-bs-target="##staticBackdropEdit">EDIT</button>
                             <button class="eachContactButton">DELETE</button>
                             <button class="eachContactButton " data-bs-toggle="modal" data-bs-target="##staticBackdrop">VIEW</button>
                         </div>
@@ -213,8 +256,32 @@
                 </div>
             </div>
             <div class="col-1"></div>
-            
         </div>
+        
+        <cfif structKeyExists(form,"createSubmit")>
+            <cfset local.structure = structNew()>
+            <cfset local.expandContactPath = "Assets/UploadedImages">
+            <cfloop collection="#form#" item="item">
+                <cfset local.structure[item] = form[item]>
+            </cfloop>
+            <cfif form.profilePic EQ "">
+                <cfelse>
+                    <cffile  
+                    action="upload"
+                    filefield="form.profilePic"
+                    destination="#expandPath(local.expandContactPath)#"
+                    nameConflict="MakeUnique"
+                    result="contactFile">
+            </cfif>
+            <cfset local.object = new Component.function()>
+            <cfset local.result = local.object.addContacts(local.structure,contactFile.serverfile)>
+            <cfif local.result EQ false>
+                <div class="text-center">
+                    <div class="text-danger fw-bold">Email already exists<div>
+                <div>
+            </cfif>
+        </cfif>
     </cfoutput>
+    <script src="./JavaScript/script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

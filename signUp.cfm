@@ -30,7 +30,7 @@
                     </div>
                     <div class="text-center accessMainDiv">
                         <div class="accessHeading">SIGN UP</div>
-                        <form action="" method="POST">
+                        <form action="" method="POST" enctype="multipart/form-data">
                             <div>
                                 <div>
                                     <input name="fullName" id="fullNameId" class="inputStyle" type="text" placeholder="Full Name">
@@ -58,7 +58,7 @@
                                 </div>
                                 <div id="profPicWarning" class="registerWarning"></div>
                                 <div>
-                                    <button name="signUpButton" onclick="return registerUser()" type="button" class="accessButton py-1 mt-3">REGISTER</button>
+                                    <button name="signUpButton" onclick="return registerUser()" type="submit" class="accessButton py-1 mt-3">REGISTER</button>
                                 </div>
                             </div>
                         </form>
@@ -68,12 +68,23 @@
             <div class="col-3"></div>
         </div>
         <cfif structKeyExists(form,"signUpButton")>
+            <cfset local.filePath = "Assets/UploadedImages">
+            <cffile  
+            filefield="form.profilePic"
+            action="upload" 
+            destination="#expandPath(local.filePath)#"
+            nameConflict="MakeUnique"
+            result="fileName">
             <cfset local.object = new Component.function()>
-            <cfset local.result = local.object.addUser(form.fullName,form.emailId,form.userName,form.password,form.profilePic)>
+            <cfset local.result = local.object.addUser(form.fullName,form.emailId,form.userName,form.password,fileName.serverfile)>
             <cfif local.result EQ true>
                 <div class="text-center">
-                    <div class="text-success">User Registered Successfully<div>
+                    <div class="text-success fw-bold">User Registered Successfully<div>
                 <div>
+                <cfelse>
+                    <div class="text-center">
+                        <div class="text-danger fw-bold">UserId or email already exists<div>
+                    <div>
             </cfif>
         </cfif>
     </cfoutput>
