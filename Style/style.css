@@ -1,0 +1,283 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    background-color: #D8E5F1;
+    overflow-x: hidden;
+}
+
+/* Access Pages */
+
+.accessPageHead{
+    background-color: #337AB7;
+    color: white;
+}
+
+.accessPageHead a{
+    color: white;
+    text-decoration: none;
+}
+
+.accessBodyMainDiv{
+    height: 100%;
+}
+
+.addressLogoMainDiv{
+    background-color: #337AB7;
+    height: 100%;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.addressLoginMainDiv{
+    background-color: #337AB7;
+    height: 60vh;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.addressLogoDiv{
+    display: flex;
+    justify-content: center;
+    width: 18vw;
+}
+
+.accessMainDiv{
+    background-color: white;
+    width:30vw;
+    border-radius:0px 10px 10px 0px;
+}
+
+.loginMainDiv{
+    background-color: white;
+    width:30vw;
+    border-radius:0px 10px 10px 0px;
+    height: 60vh;
+}
+
+.inputStyle{
+    border: none;
+    border-bottom: 1px solid grey;
+    width: 26vw;
+    margin-top: 7vh;
+}
+
+.accessHeading{
+    font-size: 25px;
+    margin-bottom: 1vh;
+    color: #337AB7;
+}
+
+.accessButton{
+    width: 20vw;
+    border: 1px solid #337AB7;
+    color: #337AB7;
+    border-radius: 20px;
+    background-color: white;
+    margin-bottom: 5vh;
+}
+
+.registerClass{
+    text-decoration: none;
+}
+
+
+.profileBox{
+    background-color: white;
+    width: 13vw;
+}
+
+.createContactbutton{
+    font-size: 12px;
+    background-color: #337AB7;
+    color: white;
+    font-weight: bold;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.profileUserName{
+    color: #205f97;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.userAddedContacts{
+    background-color: white;
+    width: 100%;
+}
+
+.userContactsHead{
+    padding-left: 8vw;
+    border-bottom: 1px solid #dddcdc;
+}
+
+.userContactsHead *{
+    font-weight: bold;
+    font-size: 13px;
+    color: #205f97;
+}
+
+.userContactsName{
+    margin-right: 7vw;
+}
+
+.userContactsEmail{
+    margin-right: 10vw;
+}
+
+.eachContact{
+    border-bottom: 1px solid #dddcdc;
+    align-items: center;
+    margin-bottom:3vh;
+}
+
+.contactProfileImage{
+    border-radius: 40px;
+}
+
+.eachContactName{
+    width: 10vw;
+    text-align: left;
+}
+
+.eachContactMail{
+    width: 15vw;
+    text-align: left;
+}
+
+.eachContactNumber{
+    width: 10vw;
+    text-align: left;
+}
+
+.eachContactButton{
+    margin-left: 2vw;
+    border: 1px solid #205f97;
+    background-color: white;
+    color: #205f97;
+    border-radius: 20px;
+    width: 6vw;
+}
+
+.eachContactButton:hover{
+    margin-left: 2vw;
+    border: 1px solid #205f97;
+    background-color: #77a1c5;
+    color: white;
+    border-radius: 20px;
+    width: 6vw;
+}
+
+.registerWarning{
+    font-weight: 600;
+    font-size: 14px;
+    color: crimson;
+}
+
+/* Modal */
+
+.editModal{
+    background-color: #DAEEF7;
+    height: 85.4vh;
+    width: 65vw;
+}
+
+.editMainModal{
+    background-color: #DAEEF7;
+    width: 65vw;
+}
+
+.modalMainBody{
+    background-color: white;
+    height: 85vh;
+    width: 75%;
+}
+.modalEditMainBody{
+    background-color: white;
+
+    width: 75%;
+}
+
+.editModalContent{
+    width: 80%;
+}
+
+.contactModalHead{
+    background-color: #DAEEF7;
+    color: #205f97;
+    font-size: 23px;
+    font-weight: 700;
+    width: 70%;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+.contactEditModalHead{
+    background-color: #DAEEF7;
+    color: #205f97;
+    font-size: 23px;
+    font-weight: 700;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+.modalProfileHead{
+    color: #205f97;
+    width: 8vw;
+    text-align: left;
+    padding-left: 2vw;
+    margin-left: 5vw;
+    font-weight: bold;
+}
+
+.modalColon{
+    width: 5vw;
+    text-align: center;
+}
+
+.profileEachDataDiv{
+    display: flex;
+    margin-bottom: 3vh;
+}
+
+
+.modalProfileData{
+    width: 20vw;
+    text-align: left;
+}
+
+.modalBtnClose{
+    font-size: 18px;
+    background-color: #337AB7;
+    color: white;
+    border: none;
+    margin-bottom: 20px;
+    width: 10vw;
+    border-radius: 15px;
+}
+
+.personalDetailsHead{
+    color: #205f97;
+    font-size: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #205f97;
+}
+
+.editContactPersonalInput{
+    border: none;
+    border-bottom: 1px solid rgb(180, 180, 180);
+    border-top: #dddcdc 1px solid;
+}
+
+.editContactPersonalInputFile{
+    border: none;
+    border-bottom: 1px solid rgb(180, 180, 180);
+    border-top: #dddcdc 1px solid;
+    width: 40%;
+}
+
+.createContactFields{
+    font-weight: bold;
+    color: #205f97;
+}
