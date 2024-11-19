@@ -1,0 +1,80 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+body{
+    background-color: #D8E5F1;
+    overflow-x: hidden;
+}
+
+/* Access Pages */
+
+.accessPageHead{
+    background-color: #337AB7;
+    color: white;
+}
+
+.accessPageHead a{
+    color: white;
+    text-decoration: none;
+}
+
+.addressLogoMainDiv{
+    background-color: #337AB7;
+    height: 80vh;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.addressLoginMainDiv{
+    background-color: #337AB7;
+    height: 60vh;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.addressLogoDiv{
+    display: flex;
+    justify-content: center;
+    width: 18vw;
+}
+
+.accessMainDiv{
+    background-color: white;
+    width:30vw;
+    border-radius:0px 10px 10px 0px;
+    height: 80vh;
+}
+
+.loginMainDiv{
+    background-color: white;
+    width:30vw;
+    border-radius:0px 10px 10px 0px;
+    height: 60vh;
+}
+
+.inputStyle{
+    border: none;
+    border-bottom: 1px solid grey;
+    width: 26vw;
+    margin-bottom: 8vh;
+}
+
+
+.accessHeading{
+    font-size: 25px;
+    margin-bottom: 1vh;
+    color: #337AB7;
+}
+
+.accessButton{
+    width: 20vw;
+    border: 1px solid #337AB7;
+    color: #337AB7;
+    border-radius: 20px;
+    background-color: white;
+    margin-bottom: 5vh;
+}
+
+.registerClass{
+    text-decoration: none;
+}
