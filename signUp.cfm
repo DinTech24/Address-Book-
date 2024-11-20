@@ -68,15 +68,16 @@
             <div class="col-3"></div>
         </div>
         <cfif structKeyExists(form,"signUpButton")>
-            <cfset local.filePath = "Assets/UploadedImages">
+            <cfset local.filePath = "Assets/UploadedImages/">
             <cffile  
             filefield="form.profilePic"
             action="upload" 
             destination="#expandPath(local.filePath)#"
             nameConflict="MakeUnique"
             result="fileName">
+            <cfset local.userProfileImage = local.filePath & filename.serverfile>
             <cfset local.object = new Component.function()>
-            <cfset local.result = local.object.addUser(form.fullName,form.emailId,form.userName,form.password,fileName.serverfile)>
+            <cfset local.result = local.object.addUser(form.fullName,form.emailId,form.userName,form.password,local.userProfileImage)>
             <cfif local.result EQ true>
                 <div class="text-center">
                     <div class="text-success fw-bold">User Registered Successfully<div>
@@ -89,5 +90,7 @@
         </cfif>
     </cfoutput>
     <script src="./JavaScript/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
 </body>
 </html>

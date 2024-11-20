@@ -99,11 +99,11 @@ function login(){
 
 function createContact(){
     document.getElementById("createContactHead").innerHTML = "CREATE CONTACT"
+    document.getElementById("editModalId").src ="./Assets/Images/addressProfilePic.jpeg";
+    document.getElementById("createContactForm").reset();
+    document.getElementById("createSubmitId").name="createSubmit";
 }
 
-function editContact(){
-    document.getElementById("createContactHead").innerHTML = "EDIT CONTACT"
-}
 
 function addContact(){
     var title = document.getElementById("selectTitleId").value;
@@ -112,7 +112,7 @@ function addContact(){
     var gender = document.getElementById("selectGenderId").value;
     var dateOfBirth = document.getElementById("dobId").value;
     var address = document.getElementById("addressId").value;
-    var street = document.getElementById("sreetId").value;
+    var street = document.getElementById("streetId").value;
     var district = document.getElementById("districtId").value;
     var state = document.getElementById("stateId").value;
     var country = document.getElementById("countryId").value;
@@ -241,5 +241,87 @@ function addContact(){
         event.preventDefault();
     }
     return flag;
+}
 
+function deleteContact(contactId){
+    if(confirm("Are you sure to delete the contact?")){
+        $.ajax({
+            type:"POST",
+            url:"Component/function.cfc?method=deleteContact",
+            data:{contactId:contactId.value},
+            success:function(result){
+                if(result){
+                    location.reload();
+                }
+            }
+        })
+    }
+}
+
+function viewModalData(viewContact){
+    $.ajax({
+        type:"POST",
+        url:"Component/function.cfc?method=viewModal",
+        data:{contactIdModal:viewContact.value},
+        success:function(result){
+            var struct = JSON.parse(result);
+            document.getElementById("viewModalName").innerHTML = struct.title + " "+struct.firstName+" "+struct.lastName;
+            document.getElementById("viewModalGender").innerHTML = struct.gender;
+            document.getElementById("viewModalDate").innerHTML =struct.dateOfBirth;
+            document.getElementById("viewModalAddress").innerHTML = struct.address +" "+struct.street+" "+struct.district+" "+struct.state+" "+struct.country;
+            document.getElementById("viewModalPincode").innerHTML = struct.pincode;
+            document.getElementById("viewModalEmail").innerHTML = struct.emailId;
+            document.getElementById("viewModalPhone").innerHTML = struct.phoneNumber;
+            document.getElementById("viewModalProfilePic").src = struct.profileImage;
+        }
+    })
+}
+
+function editContact(editId){
+    $.ajax({
+        type:"POST",
+        url:"Component/function.cfc?method=editModal",
+        data:{contactId:editId.value},
+        success:function(result){
+            var struct = JSON.parse(result);
+            document.getElementById("createContactHead").innerHTML = "EDIT CONTACT"
+            document.getElementById("selectTitleId").value = struct.title;
+            document.getElementById("firstNameId").value = struct.firstName;
+            document.getElementById("lastNameId").value = struct.lastName;
+            document.getElementById("selectGenderId").value = struct.gender;
+            document.getElementById("dobId").value = struct.dateOfBirth;
+            document.getElementById("addressId").value = struct.address;
+            document.getElementById("streetId").value = struct.street;
+            document.getElementById("districtId").value = struct.district;
+            document.getElementById("stateId").value = struct.state;
+            document.getElementById("countryId").value = struct.country;
+            document.getElementById("pincodeId").value = struct.pincode;
+            document.getElementById("emailIds").value = struct.emailId;
+            document.getElementById("phoneId").value = struct.phoneNumber;
+            document.getElementById("editModalId").src = struct.profileImage;
+            document.getElementById("contactId").value = struct.contactId;
+            document.getElementById("createSubmitId").name="editSubmit";
+            document.getElementById("createSubmitId").value=struct.createSubmitId;
+        }
+    })
+}
+
+function closeModal(){
+    document.getElementById("titleWarning").innerHTML = "";
+    document.getElementById("firstWarning").innerHTML = "";
+    document.getElementById("lastWarning").innerHTML = "";
+    document.getElementById("genderWarning").innerHTML = "";
+    document.getElementById("dateWarning").innerHTML = "";
+    document.getElementById("addressWarning").innerHTML = "";
+    document.getElementById("streetWarning").innerHTML = "";
+    document.getElementById("districtWarning").innerHTML = "";
+    document.getElementById("stateWarning").innerHTML = "";
+    document.getElementById("countryWarning").innerHTML = "";
+    document.getElementById("pincodeWarning").innerHTML = "";
+    document.getElementById("emailWarning").innerHTML = ""
+    document.getElementById("phoneWarning").innerHTML = ""
+}
+
+if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
 }
