@@ -8,14 +8,14 @@ function registerUser(){
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var flag = true;
 
-    if(fullName === ""){
+    if(fullName.trim() === ""){
         document.getElementById("nameWarning").innerHTML = "Name is required"
         flag = false;
     }else{
         document.getElementById("nameWarning").innerHTML = ""
     }
 
-    if(emailId === ""){
+    if(emailId.trim() === ""){
         document.getElementById("emailWarning").innerHTML = "email-id is required"
         flag = false;
     }else{
@@ -27,7 +27,7 @@ function registerUser(){
         }
     }
 
-    if(userName === ""){
+    if(userName.trim() === ""){
         document.getElementById("userWarning").innerHTML = "username is required"
         flag = false;
     }else{
@@ -39,7 +39,7 @@ function registerUser(){
         }
     }
 
-    if(password === ""){
+    if(password.trim() === ""){
         document.getElementById("passWarning").innerHTML = "password is required"
         flag = false;
     }else{
@@ -61,7 +61,7 @@ function registerUser(){
 
     var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
     console.log(profileImage);
-    if(profileImage === ""){
+    if(profileImage.trim() === ""){
         document.getElementById("profPicWarning").innerHTML = "Profile image should be added"
         flag = false;
     }else{
@@ -122,14 +122,26 @@ function addContact(){
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     var flag = true;
-    if(title === ""){
+    $.ajax({
+        type:"POST",
+        url:"Component/function.cfc?method=checkUser",
+        data:{email:emailId,phone:phone},
+        success:function(result){
+            if(result){
+                document.getElementById("userWarning").innerHTML ="emailId or phone number already Exists"
+            }else{
+                alert("true");
+            }
+        }
+    })
+    if(title.trim() === ""){
         document.getElementById("titleWarning").innerHTML = "select title";
         flag = false;
     }else{
         document.getElementById("titleWarning").innerHTML = "";
     }
 
-    if(firstName === ""){
+    if(firstName.trim() === ""){
         document.getElementById("firstWarning").innerHTML = "add firstname";
         flag = false;
     }else if(firstName.includes(" ")){
@@ -139,7 +151,7 @@ function addContact(){
         document.getElementById("firstWarning").innerHTML = "";
     }
 
-    if(lastName === ""){
+    if(lastName.trim() === ""){
         document.getElementById("lastWarning").innerHTML = "add lastname";
         flag = false;
     }else if(lastName.includes(" ")){
@@ -149,7 +161,7 @@ function addContact(){
         document.getElementById("lastWarning").innerHTML = "";
     }
 
-    if(gender === ""){
+    if(gender.trim() === ""){
         document.getElementById("genderWarning").innerHTML = "select gender";
         flag = false;
     }else{
@@ -163,42 +175,42 @@ function addContact(){
         document.getElementById("dateWarning").innerHTML = "";
     }
 
-    if(address === ""){
+    if(address.trim() === ""){
         document.getElementById("addressWarning").innerHTML = "add address";
         flag = false;
     }else{
         document.getElementById("addressWarning").innerHTML = "";
     }
 
-    if(street === ""){
+    if(street.trim() === ""){
         document.getElementById("streetWarning").innerHTML = "add street";
         flag = false;
     }else{
         document.getElementById("streetWarning").innerHTML = "";
     }
 
-    if(district === ""){
+    if(district.trim() === ""){
         document.getElementById("districtWarning").innerHTML = "add district";
         flag = false;
     }else{
         document.getElementById("districtWarning").innerHTML = "";
     }
 
-    if(state === ""){
+    if(state.trim() === ""){
         document.getElementById("stateWarning").innerHTML = "add state";
         flag = false;
     }else{
         document.getElementById("stateWarning").innerHTML = "";
     }
 
-    if(country === ""){
+    if(country.trim() === ""){
         document.getElementById("countryWarning").innerHTML = "add country";
         flag = false;
     }else{
         document.getElementById("countryWarning").innerHTML = "";
     }
 
-    if(pincode === ""){
+    if(pincode.trim() === ""){
         document.getElementById("pincodeWarning").innerHTML = "add pincode";
         flag = false;
     }else{
@@ -213,7 +225,7 @@ function addContact(){
         }
     }
 
-    if(emailId === ""){
+    if(emailId.trim() === ""){
         document.getElementById("emailWarning").innerHTML = "add email id"
         flag = false;
     }else{
@@ -225,7 +237,7 @@ function addContact(){
         }
     }
 
-    if(phone === ""){
+    if(phone.trim() === ""){
         document.getElementById("phoneWarning").innerHTML = "add phone number";
         flag = false;
     }else{
@@ -278,6 +290,7 @@ function viewModalData(viewContact){
 }
 
 function editContact(editId){
+    document.getElementById("createSubmitId").name = "editSubmit";
     $.ajax({
         type:"POST",
         url:"Component/function.cfc?method=editModal",
@@ -299,27 +312,55 @@ function editContact(editId){
             document.getElementById("emailIds").value = struct.emailId;
             document.getElementById("phoneId").value = struct.phoneNumber;
             document.getElementById("editModalId").src = struct.profileImage;
-            document.getElementById("contactId").value = struct.contactId;
-            document.getElementById("createSubmitId").name="editSubmit";
-            document.getElementById("createSubmitId").value=struct.createSubmitId;
+            document.getElementById("hiddenInput").value = struct.profileImage;
+            document.getElementById("createSubmitId").value = struct.createSubmitId;
         }
     })
 }
 
 function closeModal(){
-    document.getElementById("titleWarning").innerHTML = "";
-    document.getElementById("firstWarning").innerHTML = "";
-    document.getElementById("lastWarning").innerHTML = "";
-    document.getElementById("genderWarning").innerHTML = "";
-    document.getElementById("dateWarning").innerHTML = "";
-    document.getElementById("addressWarning").innerHTML = "";
-    document.getElementById("streetWarning").innerHTML = "";
-    document.getElementById("districtWarning").innerHTML = "";
-    document.getElementById("stateWarning").innerHTML = "";
-    document.getElementById("countryWarning").innerHTML = "";
-    document.getElementById("pincodeWarning").innerHTML = "";
-    document.getElementById("emailWarning").innerHTML = ""
-    document.getElementById("phoneWarning").innerHTML = ""
+    var nodeList = document.querySelectorAll(".registerWarning");
+    for (let i = 0; i < nodeList.length; i++) {
+        nodeList[i].innerHTML = "";
+    }
+}
+
+function pageLogout(){
+    if(confirm("Confirm to logout")){
+        $.ajax({
+            type:"POST",
+            url:"Component/function.cfc?method=logout"
+        })
+    }
+}
+
+function printTable(){
+    var printContents = document.getElementById("contactsTable").innerHTML;
+	var originalContents = document.body.innerHTML;
+	document.body.innerHTML = printContents;
+	window.print();
+	document.body.innerHTML = originalContents;
+}
+
+// function printToPdf(){
+//     $.ajax({
+//         type:"POST",
+//         url:"Component/function.cfc?method=printPdf",
+//         success:function(){
+//             alert("Hai")
+//         }
+//     })
+// }
+
+function addSpreadSheet(){
+    if(confirm("confirm to download spreadsheet")){
+        $.ajax({
+            type:"POST",
+            url:"Component/function.cfc?method=SpreadSheet",
+        })
+        alert("Spreadsheet downloaded")
+    }
+    
 }
 
 if ( window.history.replaceState ) {

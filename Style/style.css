@@ -13,6 +13,10 @@ body{
 .accessPageHead{
     background-color: #337AB7;
     color: white;
+    top:0px;
+    z-index: 1;
+    position: sticky;
+    height: 8vh;
 }
 
 .accessPageHead a{
@@ -40,6 +44,11 @@ body{
     display: flex;
     justify-content: center;
     width: 18vw;
+}
+
+.accessNames{
+    text-decoration: none;
+    color: white;
 }
 
 .accessMainDiv{
@@ -287,4 +296,10 @@ body{
 .createContactFields{
     font-weight: bold;
     color: #205f97;
+}
+
+.logoutButton{
+    color: white;
+    border: none;
+    background-color: transparent;
 }
