@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <!-- <cfoutput> -->
+    <cfoutput>
         <div class="d-flex accessPageHead justify-content-between py-2">
             <div class="ms-5">
                 <img width="30" src="./Assets/Images/Application_Logo.png" alt="logo">
@@ -23,10 +23,10 @@
         <div class="row">
             <div class="col-3"></div>
             <div class="col-6 mt-5">
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center accessBodyMainDiv">
                     <div class="addressLoginMainDiv d-flex align-items-center">
                         <div class="addressLogoDiv">
-                            <img width="70"src="./Assets/Images/Application_Logo.png" alt="logo">
+                            <img width="70" height="80" src="./Assets/Images/Application_Logo.png" alt="logo">
                         </div>
                     </div>
                     <div class="text-center loginMainDiv">
@@ -34,13 +34,13 @@
                         <form action="" method="POST">
                             <div>
                                 <div>
-                                    <input class="inputStyle" placeholder="Username" type="text">
+                                    <input name="username" id="" class="inputStyle" placeholder="Username" type="text">
                                 </div>
                                 <div>
-                                    <input class="inputStyle" placeholder="Password" type="password">
+                                    <input name="password" class="inputStyle" placeholder="Password" type="password">
                                 </div>
                                 <div>
-                                    <button class="accessButton py-1">LOGIN</button>
+                                    <button name="loginButton" class="accessButton py-1 mt-5">LOGIN</button>
                                 </div>
                                 <div>
                                     <span>Or Sign in Using</span>
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <div>Don't have an account? <a class="registerClass" href="./signUp.html">Register Here</a></div>
+                                    <div>Don't have an account? <a class="registerClass" href="./signUp.cfm">Register Here</a></div>
                                 </div>
                             </div>
                         </form>
@@ -63,6 +63,19 @@
             </div>
             <div class="col-3"></div>
         </div>
-    <!-- </cfoutput> -->
+        <cfif structKeyExists(form, "loginButton")>
+            <cfset local.object = new Component.function()>
+            <cfset local.result = local.object.loginUser(form.username,form.password)>
+            <cfif local.result EQ false>
+                <div class="text-center">
+                    <div class="text-danger fw-bold">Invalid Credentials<div>
+                <div>
+                <cfelse>
+                    <div class="text-center">
+                        <div class="text-success fw-bold">valid Credentials<div>
+                    <div>
+            </cfif>
+        </cfif>
+    </cfoutput>
 </body>
 </html>

@@ -78,3 +78,250 @@ function registerUser(){
     }
     return flag;
 }
+
+function login(){
+    var userName = document.getElementById("userNameId").value;
+    var password = document.getElementById("password").value;
+    if(userName === ""){
+        document.getElementById("userWarning").innerHTML = "username is required"
+        flag = false;
+    }else{
+        document.getElementById("userWarning").innerHTML = ""
+    }
+    if(password === ""){
+        document.getElementById("passWarning").innerHTML = "password is required"
+        flag = false;
+    }else{
+        document.getElementById("passWarning").innerHTML = ""
+    }
+    return flag;
+}
+
+function createContact(){
+    document.getElementById("createContactHead").innerHTML = "CREATE CONTACT"
+    document.getElementById("editModalId").src ="./Assets/Images/addressProfilePic.jpeg";
+    document.getElementById("createContactForm").reset();
+    document.getElementById("createSubmitId").name="createSubmit";
+}
+
+
+function addContact(){
+    var title = document.getElementById("selectTitleId").value;
+    var firstName = document.getElementById("firstNameId").value;
+    var lastName = document.getElementById("lastNameId").value;
+    var gender = document.getElementById("selectGenderId").value;
+    var dateOfBirth = document.getElementById("dobId").value;
+    var address = document.getElementById("addressId").value;
+    var street = document.getElementById("streetId").value;
+    var district = document.getElementById("districtId").value;
+    var state = document.getElementById("stateId").value;
+    var country = document.getElementById("countryId").value;
+    var pincode = document.getElementById("pincodeId").value;
+    var emailId = document.getElementById("emailIds").value;
+    var phone = document.getElementById("phoneId").value;
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    var flag = true;
+    if(title === ""){
+        document.getElementById("titleWarning").innerHTML = "select title";
+        flag = false;
+    }else{
+        document.getElementById("titleWarning").innerHTML = "";
+    }
+
+    if(firstName === ""){
+        document.getElementById("firstWarning").innerHTML = "add firstname";
+        flag = false;
+    }else if(firstName.includes(" ")){
+        document.getElementById("firstWarning").innerHTML = "No spaces in first name";
+        flag = false;
+    }else{
+        document.getElementById("firstWarning").innerHTML = "";
+    }
+
+    if(lastName === ""){
+        document.getElementById("lastWarning").innerHTML = "add lastname";
+        flag = false;
+    }else if(lastName.includes(" ")){
+        document.getElementById("lastWarning").innerHTML = "No spaces in last name";
+        flag = false;
+    }else{
+        document.getElementById("lastWarning").innerHTML = "";
+    }
+
+    if(gender === ""){
+        document.getElementById("genderWarning").innerHTML = "select gender";
+        flag = false;
+    }else{
+        document.getElementById("genderWarning").innerHTML = "";
+    }
+
+    if(dateOfBirth === ""){
+        document.getElementById("dateWarning").innerHTML = "add Date of birth";
+        flag = false;
+    }else{
+        document.getElementById("dateWarning").innerHTML = "";
+    }
+
+    if(address === ""){
+        document.getElementById("addressWarning").innerHTML = "add address";
+        flag = false;
+    }else{
+        document.getElementById("addressWarning").innerHTML = "";
+    }
+
+    if(street === ""){
+        document.getElementById("streetWarning").innerHTML = "add street";
+        flag = false;
+    }else{
+        document.getElementById("streetWarning").innerHTML = "";
+    }
+
+    if(district === ""){
+        document.getElementById("districtWarning").innerHTML = "add district";
+        flag = false;
+    }else{
+        document.getElementById("districtWarning").innerHTML = "";
+    }
+
+    if(state === ""){
+        document.getElementById("stateWarning").innerHTML = "add state";
+        flag = false;
+    }else{
+        document.getElementById("stateWarning").innerHTML = "";
+    }
+
+    if(country === ""){
+        document.getElementById("countryWarning").innerHTML = "add country";
+        flag = false;
+    }else{
+        document.getElementById("countryWarning").innerHTML = "";
+    }
+
+    if(pincode === ""){
+        document.getElementById("pincodeWarning").innerHTML = "add pincode";
+        flag = false;
+    }else{
+        if(pincode.length !== 6){
+            document.getElementById("pincodeWarning").innerHTML = "enter 6 digit pincode";
+            flag = false;
+        }else if(/^[0-9]{6}$/.test(pincode) === false){
+            document.getElementById("pincodeWarning").innerHTML = "pincode should only contain digits";
+            flag = false;
+        }else{
+            document.getElementById("pincodeWarning").innerHTML = "";
+        }
+    }
+
+    if(emailId === ""){
+        document.getElementById("emailWarning").innerHTML = "add email id"
+        flag = false;
+    }else{
+        if(emailPattern.test(emailId) === false){
+            document.getElementById("emailWarning").innerHTML = "should follow email Pattern"
+            flag = false;
+        }else{
+            document.getElementById("emailWarning").innerHTML = ""
+        }
+    }
+
+    if(phone === ""){
+        document.getElementById("phoneWarning").innerHTML = "add phone number";
+        flag = false;
+    }else{
+        if(phonePattern.test(phone) === false){
+            document.getElementById("phoneWarning").innerHTML = "phone should follow the pattern";
+            flag = false;
+        }else{
+            document.getElementById("phoneWarning").innerHTML = ""
+        }
+    }
+
+    if(flag == false){
+        event.preventDefault();
+    }
+    return flag;
+}
+
+function deleteContact(contactId){
+    if(confirm("Are you sure to delete the contact?")){
+        $.ajax({
+            type:"POST",
+            url:"Component/function.cfc?method=deleteContact",
+            data:{contactId:contactId.value},
+            success:function(result){
+                if(result){
+                    location.reload();
+                }
+            }
+        })
+    }
+}
+
+function viewModalData(viewContact){
+    $.ajax({
+        type:"POST",
+        url:"Component/function.cfc?method=viewModal",
+        data:{contactIdModal:viewContact.value},
+        success:function(result){
+            var struct = JSON.parse(result);
+            document.getElementById("viewModalName").innerHTML = struct.title + " "+struct.firstName+" "+struct.lastName;
+            document.getElementById("viewModalGender").innerHTML = struct.gender;
+            document.getElementById("viewModalDate").innerHTML =struct.dateOfBirth;
+            document.getElementById("viewModalAddress").innerHTML = struct.address +" "+struct.street+" "+struct.district+" "+struct.state+" "+struct.country;
+            document.getElementById("viewModalPincode").innerHTML = struct.pincode;
+            document.getElementById("viewModalEmail").innerHTML = struct.emailId;
+            document.getElementById("viewModalPhone").innerHTML = struct.phoneNumber;
+            document.getElementById("viewModalProfilePic").src = struct.profileImage;
+        }
+    })
+}
+
+function editContact(editId){
+    $.ajax({
+        type:"POST",
+        url:"Component/function.cfc?method=editModal",
+        data:{contactId:editId.value},
+        success:function(result){
+            var struct = JSON.parse(result);
+            document.getElementById("createContactHead").innerHTML = "EDIT CONTACT"
+            document.getElementById("selectTitleId").value = struct.title;
+            document.getElementById("firstNameId").value = struct.firstName;
+            document.getElementById("lastNameId").value = struct.lastName;
+            document.getElementById("selectGenderId").value = struct.gender;
+            document.getElementById("dobId").value = struct.dateOfBirth;
+            document.getElementById("addressId").value = struct.address;
+            document.getElementById("streetId").value = struct.street;
+            document.getElementById("districtId").value = struct.district;
+            document.getElementById("stateId").value = struct.state;
+            document.getElementById("countryId").value = struct.country;
+            document.getElementById("pincodeId").value = struct.pincode;
+            document.getElementById("emailIds").value = struct.emailId;
+            document.getElementById("phoneId").value = struct.phoneNumber;
+            document.getElementById("editModalId").src = struct.profileImage;
+            document.getElementById("contactId").value = struct.contactId;
+            document.getElementById("createSubmitId").name="editSubmit";
+            document.getElementById("createSubmitId").value=struct.createSubmitId;
+        }
+    })
+}
+
+function closeModal(){
+    document.getElementById("titleWarning").innerHTML = "";
+    document.getElementById("firstWarning").innerHTML = "";
+    document.getElementById("lastWarning").innerHTML = "";
+    document.getElementById("genderWarning").innerHTML = "";
+    document.getElementById("dateWarning").innerHTML = "";
+    document.getElementById("addressWarning").innerHTML = "";
+    document.getElementById("streetWarning").innerHTML = "";
+    document.getElementById("districtWarning").innerHTML = "";
+    document.getElementById("stateWarning").innerHTML = "";
+    document.getElementById("countryWarning").innerHTML = "";
+    document.getElementById("pincodeWarning").innerHTML = "";
+    document.getElementById("emailWarning").innerHTML = ""
+    document.getElementById("phoneWarning").innerHTML = ""
+}
+
+if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+}
