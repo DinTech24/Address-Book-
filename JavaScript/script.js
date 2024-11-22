@@ -119,21 +119,40 @@ function addContact(){
     var pincode = document.getElementById("pincodeId").value;
     var emailId = document.getElementById("emailIds").value;
     var phone = document.getElementById("phoneId").value;
+    var editModal = document.getElementById("createSubmitId").name;
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     var flag = true;
-    $.ajax({
-        type:"POST",
-        url:"Component/function.cfc?method=checkUser",
-        data:{email:emailId,phone:phone},
-        success:function(result){
-            if(result){
-                document.getElementById("userWarning").innerHTML ="emailId or phone number already Exists"
-            }else{
-                alert("true");
+    if(editModal == "editSubmit"){
+        $.ajax({
+            type:"POST",
+            url:"Component/function.cfc?method=checkEditUser",
+            data:{email:emailId,phone:phone},
+            success:function(result){
+                if(result){
+                    document.getElementById("userWarning").innerHTML ="Enter different email or phone number"
+                    flag = false;
+                }else{
+                    document.getElementById("userWarning").innerHTML =""
+                }
             }
-        }
-    })
+        })
+    }else{
+        $.ajax({
+            type:"POST",
+            url:"Component/function.cfc?method=checkUser",
+            data:{email:emailId,phone:phone},
+            success:function(result){
+                if(result){
+                    document.getElementById("userWarning").innerHTML ="Enter different email or phone number"
+                    flag = false;
+                }else{
+                    document.getElementById("userWarning").innerHTML =""
+                }
+            }
+        })
+    }
+    
     if(title.trim() === ""){
         document.getElementById("titleWarning").innerHTML = "select title";
         flag = false;
@@ -297,6 +316,7 @@ function editContact(editId){
         data:{contactId:editId.value},
         success:function(result){
             var struct = JSON.parse(result);
+            document.getElementById("createContactForm").reset();
             document.getElementById("createContactHead").innerHTML = "EDIT CONTACT"
             document.getElementById("selectTitleId").value = struct.title;
             document.getElementById("firstNameId").value = struct.firstName;
@@ -323,13 +343,19 @@ function closeModal(){
     for (let i = 0; i < nodeList.length; i++) {
         nodeList[i].innerHTML = "";
     }
+    document.getElementById("userWarning").innerHTML =""
 }
 
 function pageLogout(){
     if(confirm("Confirm to logout")){
         $.ajax({
             type:"POST",
-            url:"Component/function.cfc?method=logout"
+            url:"Component/function.cfc?method=logout",
+            success:function(result){
+                if(result){
+                    location.reload();
+                }
+            }
         })
     }
 }
@@ -339,18 +365,17 @@ function printTable(){
 	var originalContents = document.body.innerHTML;
 	document.body.innerHTML = printContents;
 	window.print();
+    
 	document.body.innerHTML = originalContents;
 }
 
-// function printToPdf(){
-//     $.ajax({
-//         type:"POST",
-//         url:"Component/function.cfc?method=printPdf",
-//         success:function(){
-//             alert("Hai")
-//         }
-//     })
-// }
+function printToPdf(){
+    if(confirm("confirm to download PDF")){
+        return true;
+    }else{
+        return false;
+    }
+ }
 
 function addSpreadSheet(){
     if(confirm("confirm to download spreadsheet")){
