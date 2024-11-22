@@ -15,8 +15,8 @@
                 <span>ADDRESS BOOK</span>
             </div>
             <div class="d-flex me-5">
-                <div class="me-4"><a href="">Sign Up</a></div>
-                <div><a href="./Login.cfm">Login</a></div>
+                <div class="me-4"><a class="accessNames" href="./signUp.cfm"><img src="./Assets/Images/signup.png"> Sign Up</a></div>
+                <div><a class="accessNames" href="./Login.cfm"><img height="20" src="./Assets/Images/login.png"> Login</a></div>
             </div>
         </div>
         <div class="row">

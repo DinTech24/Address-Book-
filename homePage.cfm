@@ -6,13 +6,13 @@
         <title>Document</title>
         <link rel="stylesheet" href="./Bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="./Style/style.css">
+        <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
     </head>
     <body>
-        <cfif structKeyExists(session, "username")>
-            <cfset local.object = new Component.function()>
-            <cfset local.result = local.object.displayHomepage()>
-            <cfset local.contactResult = local.object.displayContact()>
-        </cfif>
+        <cfset local.object = new Component.function()>
+        <cfset local.result = local.object.displayHomepage()>
+        <cfset local.contactResult = local.object.displayContact()>
+
         <cfoutput>
             <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog ">
@@ -131,6 +131,7 @@
                                             <div class="mb-2 createContactFields">Upload Photo </div>
                                         </div>
                                         <div>
+                                            <input  type="text" hidden id="hiddenInput" name="hiddenProfilePic">
                                             <input name="profilePic" id="profilePicId" class="editContactPersonalInputFile" type="file">
                                             <div id="picWarning" class="registerWarning"></div>
                                         </div>
@@ -195,7 +196,9 @@
                                         </div>
                                         <div class="text-center mt-4">
                                             <button onclick="return addContact()" id="createSubmitId" type="submit" name="createSubmit" class="modalBtnClose">SUBMIT</button>
+                                            <div id="userWarning" class="text-danger fw-bold mt-3"></div>
                                         </div>
+                                        
                                     </form>
                                 </div>
                             </div>
@@ -220,7 +223,8 @@
                 </div>
                 <form method="POST">
                     <div class="d-flex me-5">
-                        <button type="submit" class="logoutButton" name="logout">Logout</button>
+                        <img src="./Assets/Images/logout.png">
+                        <button type="submit" onclick="pageLogout()" class="logoutButton ms-2" name="logout">Logout</button>
                     </div>
                 </form>
             </div>
@@ -229,9 +233,9 @@
                 <div class="col-10 ">
                     <div class="bg-white mt-3 d-flex justify-content-end rounded">
                         <div class="py-2">
-                            <a href="" class="ms-3"><img width="30" src="./Assets/Images/adobe.png" alt="1"></a>
-                            <a href="" class="ms-3"><img width="30" src="./Assets/Images/spreadsheet.png" alt="2"></a>
-                            <a href="" class="mx-3"><img width="30" src="./Assets/Images/print.png" alt="3"></a>
+                            <a href="" class="ms-3" name="printToPdf" ><img width="30" src="./Assets/Images/adobe.png" alt="1"></a>
+                            <a class="ms-3" onclick="addSpreadSheet()"><img width="30" src="./Assets/Images/spreadsheet.png" alt="2"></a>
+                            <a href="" class="mx-3" onclick="printTable()"><img width="30" src="./Assets/Images/print.png" alt="3"></a>
                         </div>
                     </div>
                     <div class="d-flex mt-3">
@@ -242,7 +246,7 @@
                                 <button data-bs-toggle="modal" onclick="createContact()" data-bs-target="##staticBackdropEdit" class="rounded-pill createContactbutton px-1 py-1">CREATE CONTACT</button>
                             </div>
                         </div>
-                        <div class="userAddedContacts px-2">
+                        <div class="userAddedContacts px-2" id="contactsTable">
                             <div class="d-flex userContactsHead py-3">
                                 <div class="userContactsName">NAME</div>
                                 <div class="userContactsEmail">EMAIL ID</div>
@@ -273,6 +277,7 @@
                     <cfset local.structure[item] = form[item]>
                 </cfloop>
                 <cfif form.profilePic EQ "">
+                    <cfset local.profileImage = "Assets/Images/profileImage.png">
                     <cfelse>
                         <cffile  
                         action="upload"
@@ -280,19 +285,21 @@
                         destination="#expandPath(local.expandContactPath)#"
                         nameConflict="MakeUnique"
                         result="contactFile">
+                        <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
                 </cfif>
-                <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
                 <cfset local.object = new Component.function()>
                 <cfset local.result = local.object.addContacts(local.structure,local.profileImage)>
+                <cfif local.result EQ false>
+                </cfif>
             </cfif>
             <cfif structKeyExists(form,"editSubmit")>
-                <cfset local.structure = structNew()>
+                <cfset local.Newstructure = structNew()>
                 <cfset local.expandContactPath = "Assets/UploadedImages/">
                 <cfloop collection="#form#" item="item">
-                    <cfset local.structure[item] = form[item]>
+                    <cfset local.Newstructure[item] = form[item]>
                 </cfloop>
-                
                 <cfif form.profilePic EQ "">
+                    <cfset local.profileImage = "#form.hiddenProfilePic#">
                     <cfelse>
                         <cffile  
                         action="upload"
@@ -300,15 +307,54 @@
                         destination="#expandPath(local.expandContactPath)#"
                         nameConflict="MakeUnique"
                         result="contactFile">
+                        <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
                 </cfif>
-                <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
                 <cfset local.object = new Component.function()>
-                <cfset local.result = local.object.editContacts(local.structure,local.profileImage)>
+                <cfset local.result = local.object.editContacts(local.Newstructure,local.profileImage)>
             </cfif>
-            <cfif structKeyExists(form,"logout")>
+            <cfif structKeyExists(form, "printToPdf")>
                 <cfset local.object = new Component.function()>
-                <cfset local.object.logout()>
-            </cfif>
+                <cfset local.result = local.object.printPdf()>
+                <cfdocument format="pdf" fileName="PrintedPDFs/printed.pdf" overwrite="true">
+                    <table border = "1"> 
+                        <tr>
+                            <th>Profile Image</th>
+                            <th>Title</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Gender</th>
+                            <th>Date Of Birth</th>
+                            <th>Address</th>
+                            <th>Street</th>
+                            <th>District</th>
+                            <th>State</th>
+                            <th>Country</th>
+                            <th>Pincode</th>
+                            <th>EmailId</th>
+                            <th>Phone Number</th>
+                            <th>Created By</th>
+                        </tr>
+                        <cfloop query="local.result">
+                            <tr>
+                                <td><img src="#printPdfQuery.profileImage#"></td> 
+                                <td>#printPdfQuery.title#</td> 
+                                <td>#printPdfQuery.firstName#</td> 
+                                <td>#printPdfQuery.lastName#</td> 
+                                <td>#printPdfQuery.gender#</td> 
+                                <td>#printPdfQuery.dateOfBirth#</td> 
+                                <td>#printPdfQuery.address#</td> 
+                                <td>#printPdfQuery.street#</td> 
+                                <td>#printPdfQuery.district#</td> 
+                                <td>#printPdfQuery.state#</td> 
+                                <td>#printPdfQuery.country#</td> 
+                                <td>#printPdfQuery.pincode#</td> 
+                                <td>#printPdfQuery.emailId#</td> 
+                                <td>#printPdfQuery.phoneNumber#</td> 
+                            </tr> 
+                        </cfloop> 
+                    </table>
+                </cfdocument>
+            </cfif> 
         </cfoutput>
         <script src="./JavaScript/script.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

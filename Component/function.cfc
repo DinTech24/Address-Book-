@@ -32,6 +32,7 @@
         <cfargument  name="password">
         <cfset local.encryptedPassword = hash("#arguments.password#","sha-256","UTF-8")>
         <cfset session.userName = arguments.userName>
+        <cfset session.login = true>
         <cfset session.defaultPath = "Assets/Images/profileImage.png">
         <cfquery name="checkUser">
             select count(username) as userCount from userTable 
@@ -45,33 +46,48 @@
         </cfif>
     </cffunction>
 
-    <cffunction  name="addContacts">
-        <cfargument name="structure">
-        <cfargument default="#session.defaultPath#" name="profilePic">
-        <cfquery name="addContact">
-            insert into contactTable(title,firstName,lastName,gender,dateOfBirth,profileImage,address,
-                street,district,state,country,pincode,emailId,phoneNumber,_createdBy,_createdOn) values(
-                <cfqueryparam value='#arguments.structure["selectTitle"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["firstName"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["lastName"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["selectGender"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["dob"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.profilePic#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["address"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["street"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["district"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["state"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["country"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["pinCode"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["emailId"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#arguments.structure["phone"]#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#session.username#' cfsqltype="cf_sql_varchar">,
-                <cfqueryparam value='#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype="cf_sql_date">
-            )
+    <cffunction  name="checkUser" access="remote" returnType="boolean">
+    <cfargument  name="email">
+    <cfargument  name="phone">
+        <cfquery name="userExists">
+            select count(emailId) as userCount from contactTable 
+            where _createdBy = <cfqueryparam value='#session.username#' cfsqltype="cf_sql_varchar">
+            AND emailId = <cfqueryparam value='#arguments.email#' cfsqltype="cf_sql_varchar">
+            OR phoneNumber = <cfqueryparam value='#arguments.phone#' cfsqltype="cf_sql_varchar">
         </cfquery>
+        <cfif userExists.userCount EQ 1>
+            <cfreturn true>
+        </cfif>
     </cffunction>
 
-    <cffunction  name="displayHomepage">
+    <cffunction  name="addContacts" returnType="boolean">
+        <cfargument name="structure">
+        <cfargument name="profilePic">
+            <cfquery name="addContact">
+                insert into contactTable(title,firstName,lastName,gender,dateOfBirth,profileImage,address,
+                street,district,state,country,pincode,emailId,phoneNumber,_createdBy,_createdOn) values(
+                    <cfqueryparam value='#arguments.structure["selectTitle"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["firstName"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["lastName"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["selectGender"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["dob"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.profilePic#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["address"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["street"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["district"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["state"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["country"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["pinCode"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["emailId"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#arguments.structure["phone"]#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#session.username#' cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value='#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype="cf_sql_date">
+                )
+            </cfquery>
+            <cflocation url="./homePage.cfm">
+    </cffunction>
+
+    <cffunction  name="displayHomepage" returnType="query">
         <cfquery name="displayUser">
             select name,profileImage from userTable where username = '#session.username#'
         </cfquery>
@@ -82,7 +98,7 @@
         <cfreturn displayUser>
     </cffunction>
 
-    <cffunction  name="displayContact">
+    <cffunction  name="displayContact" returnType="query">
         <cfquery name="addContact">
             select contactId,firstName,lastName,emailId,phoneNumber,profileImage from contactTable 
             where _createdBy = <cfqueryparam value='#session.userName#' cfsqltype="cf_sql_varchar"> 
@@ -98,7 +114,7 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction  name="viewModal" access="remote" returnFormat="JSON">
+    <cffunction  name="viewModal" access="remote" returnFormat="JSON"  returnType="struct">
         <cfargument name="contactIdModal">
         <cfset local.structure = structNew()>
         <cfquery name="viewQuery">
@@ -122,7 +138,7 @@
         <cfreturn local.structure>
     </cffunction>
 
-    <cffunction  name="editModal"  access="remote" returnFormat="JSON">
+    <cffunction  name="editModal"  access="remote" returnFormat="JSON" returnType="struct">
         <cfargument  name="contactId">
         <cfset local.structure = structNew()>
         <cfquery name="editModalQuery">
@@ -149,7 +165,7 @@
 
     <cffunction name="editContacts">
         <cfargument name="structure">
-        <cfargument default="#session.defaultPath#" name="profilePic">
+        <cfargument name="profilePic">
         <cfquery name="editContact">
             update contactTable set
                 title = <cfqueryparam value='#arguments.structure["selectTitle"]#' cfsqltype="cf_sql_varchar">,
@@ -166,14 +182,31 @@
                 pincode = <cfqueryparam value='#arguments.structure["pinCode"]#' cfsqltype="cf_sql_varchar">,
                 emailId = <cfqueryparam value='#arguments.structure["emailId"]#' cfsqltype="cf_sql_varchar">,
                 phoneNumber = <cfqueryparam value='#arguments.structure["phone"]#' cfsqltype="cf_sql_varchar">,
-                _createdBy = <cfqueryparam value='#session.username#' cfsqltype="cf_sql_varchar">,
-                _createdOn = <cfqueryparam value='#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype="cf_sql_date">,
-                _UpdatedOn = <cfqueryparam value='#arguments.structure[selectTitle]#' cfsqltype="cf_sql_varchar"> 
-            where contactId = '#arguments.structure[editSubmit]#'
+                _UpdatedOn = <cfqueryparam value='#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype="cf_sql_varchar"> 
+            where contactId = '#arguments.structure["editSubmit"]#'
         </cfquery>
+        <cflocation url="./homePage.cfm">
     </cffunction>
 
-    <cffunction  name="logout">
+    <cffunction name="SpreadSheet" access="remote">
+        <cfquery name="spreadSheetQuery">
+            select title ,firstName ,lastName ,gender ,dateOfBirth ,profileImage,address ,street ,district ,state ,country ,pincode ,emailId ,phoneNumber,_createdBy 
+            from contactTable where _createdBy =<cfqueryparam value='#session.username#' cfsqltype="cf_sql_varchar">
+        </cfquery>
+        <cfset local.spreadSheet= CreateUUID() & ".xlsx">
+        <cfset local.filePath = ExpandPath("../Spreadsheets/"&local.spreadSheet)>
+        <cfspreadsheet action="write" query="spreadSheetQuery" filename="#local.filePath#" overwrite="no">
+    </cffunction>
+
+    <cffunction  name="printPdf" returnType="query">
+        <cfquery name="printPdfQuery" >
+            select title ,firstName ,lastName ,gender ,dateOfBirth ,profileImage,address ,street ,district ,state ,country ,pincode ,emailId ,phoneNumber,_createdBy 
+            from contactTable where _createdBy =<cfqueryparam value='#session.username#' cfsqltype="cf_sql_varchar">
+        </cfquery>
+        <cfreturn printPdfQuery>
+    </cffunction>
+
+    <cffunction  name="logout" access="remote">
         <cfset structClear(session)>
         <cflocation url="./Login.cfm">
     </cffunction>
