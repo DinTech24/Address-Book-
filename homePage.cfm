@@ -221,21 +221,21 @@
                     <img width="30" src="./Assets/Images/Application_Logo.png" alt="logo">
                     <span>ADDRESS BOOK</span>
                 </div>
-                <form method="POST">
-                    <div class="d-flex me-5">
-                        <img src="./Assets/Images/logout.png">
-                        <button type="submit" onclick="pageLogout()" class="logoutButton ms-2" name="logout">Logout</button>
-                    </div>
-                </form>
+                <div class="d-flex me-5 align-items-center">
+                    <img height="20" src="./Assets/Images/logout.png">
+                    <button type="button" onclick="pageLogout()" class="logoutButton ms-2" name="logout">Logout</button>
+                </div>
             </div>
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10 ">
                     <div class="bg-white mt-3 d-flex justify-content-end rounded">
                         <div class="py-2">
-                            <a href="" class="ms-3" name="printToPdf" ><img width="30" src="./Assets/Images/adobe.png" alt="1"></a>
-                            <a class="ms-3" onclick="addSpreadSheet()"><img width="30" src="./Assets/Images/spreadsheet.png" alt="2"></a>
-                            <a href="" class="mx-3" onclick="printTable()"><img width="30" src="./Assets/Images/print.png" alt="3"></a>
+                            <form method="POST">
+                                <button class="ms-3 pdfPrintButton" type="submit" name="printPdfCall" onclick="return printToPdf()" ><img width="30" src="./Assets/Images/adobe.png" alt="1"></button>
+                                <a class="ms-3" onclick="addSpreadSheet()"><img width="30" src="./Assets/Images/spreadsheet.png" alt="2"></a>
+                                <a href="" class="mx-3" onclick="printTable()"><img width="30" src="./Assets/Images/print.png" alt="3"></a>
+                            </form>
                         </div>
                     </div>
                     <div class="d-flex mt-3">
@@ -263,7 +263,7 @@
                                         <button class="eachContactButton" value="#local.contactResult.contactId#" onclick="deleteContact(this)" >DELETE</button>
                                         <button name="viewContactDetails" value="#local.contactResult.contactId#" type="button" onclick="viewModalData(this)" class="eachContactButton" data-bs-toggle="modal" data-bs-target="##staticBackdrop">VIEW</button>
                                     </div>
-                                <form>
+                                </form>
                             </cfloop>
                         </div>
                     </div>
@@ -312,10 +312,10 @@
                 <cfset local.object = new Component.function()>
                 <cfset local.result = local.object.editContacts(local.Newstructure,local.profileImage)>
             </cfif>
-            <cfif structKeyExists(form, "printToPdf")>
+            <cfif structKeyExists(form,"printPdfCall")>
                 <cfset local.object = new Component.function()>
                 <cfset local.result = local.object.printPdf()>
-                <cfdocument format="pdf" fileName="PrintedPDFs/printed.pdf" overwrite="true">
+                <cfdocument format="pdf" fileName="PrintedPDFs/printed.pdf" overwrite="true" orientation = "landscape">
                     <table border = "1"> 
                         <tr>
                             <th>Profile Image</th>
@@ -334,22 +334,23 @@
                             <th>Phone Number</th>
                             <th>Created By</th>
                         </tr>
-                        <cfloop query="local.result">
+                        <cfloop query="#local.result#">
                             <tr>
-                                <td><img src="#printPdfQuery.profileImage#"></td> 
-                                <td>#printPdfQuery.title#</td> 
-                                <td>#printPdfQuery.firstName#</td> 
-                                <td>#printPdfQuery.lastName#</td> 
-                                <td>#printPdfQuery.gender#</td> 
-                                <td>#printPdfQuery.dateOfBirth#</td> 
-                                <td>#printPdfQuery.address#</td> 
-                                <td>#printPdfQuery.street#</td> 
-                                <td>#printPdfQuery.district#</td> 
-                                <td>#printPdfQuery.state#</td> 
-                                <td>#printPdfQuery.country#</td> 
-                                <td>#printPdfQuery.pincode#</td> 
-                                <td>#printPdfQuery.emailId#</td> 
-                                <td>#printPdfQuery.phoneNumber#</td> 
+                                <td><img height="30" src="#local.result.profileImage#"></td> 
+                                <td>#local.result.title#</td> 
+                                <td>#local.result.firstName#</td> 
+                                <td>#local.result.lastName#</td> 
+                                <td>#local.result.gender#</td> 
+                                <td>#local.result.dateOfBirth#</td> 
+                                <td>#local.result.address#</td> 
+                                <td>#local.result.street#</td> 
+                                <td>#local.result.district#</td> 
+                                <td>#local.result.state#</td> 
+                                <td>#local.result.country#</td> 
+                                <td>#local.result.pincode#</td> 
+                                <td>#local.result.emailId#</td> 
+                                <td>#local.result.phoneNumber#</td> 
+                                <td>#local.result._createdBy#</td> 
                             </tr> 
                         </cfloop> 
                     </table>
