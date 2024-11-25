@@ -123,36 +123,6 @@ function addContact(){
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     var flag = true;
-    if(editModal == "editSubmit"){
-        $.ajax({
-            type:"POST",
-            url:"Component/function.cfc?method=checkEditUser",
-            data:{email:emailId,phone:phone},
-            success:function(result){
-                if(result){
-                    document.getElementById("userWarning").innerHTML ="Enter different email or phone number"
-                    flag = false;
-                }else{
-                    document.getElementById("userWarning").innerHTML =""
-                }
-            }
-        })
-    }else{
-        $.ajax({
-            type:"POST",
-            url:"Component/function.cfc?method=checkUser",
-            data:{email:emailId,phone:phone},
-            success:function(result){
-                if(result){
-                    document.getElementById("userWarning").innerHTML ="Enter different email or phone number"
-                    flag = false;
-                }else{
-                    document.getElementById("userWarning").innerHTML =""
-                }
-            }
-        })
-    }
-    
     if(title.trim() === ""){
         document.getElementById("titleWarning").innerHTML = "select title";
         flag = false;
