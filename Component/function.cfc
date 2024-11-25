@@ -60,38 +60,44 @@
         </cfif>
     </cffunction>
 
-    <cffunction name="checkUser" access="remote" returnType="boolean">
-        <cfargument name="email" default="">
-        <cfargument name="phone" default="">
+    <cffunction name="checkUser" returnType="boolean">
+        <cfargument name="email">
+        <cfargument name="phone">
         <cfif arguments.email NEQ session.userEmailId>
             <cfquery name="userExists">
-                SELECT count(emailId) AS userCount
+                SELECT count(contactId) AS userCount
                 FROM contactTable
                 WHERE _createdBy = < cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar" >
                     AND emailId = < cfqueryparam value = '#arguments.email#' cfsqltype = "cf_sql_varchar" >
                     OR phoneNumber = < cfqueryparam value = '#arguments.phone#' cfsqltype = "cf_sql_varchar" >
             </cfquery>
-            <cfif userExists.userCount>
+            <cfif userExists.userCount GT 0>
                 <cfreturn true>
+                <cfelse>
+                    <cfreturn false>
             </cfif>
             <cfelse>
                 <cfreturn true>
         </cfif>
     </cffunction>
 
-    <cffunction name="checkEditUser" access="remote" returnType="boolean">
+    <cffunction name="checkEditUser" returnType="boolean">
         <cfargument name="email">
         <cfargument name="phone">
+        <cfargument name="contactId">
         <cfif arguments.email NEQ session.userEmailId>
             <cfquery name="userEditExists">
-                SELECT count(emailId) AS userCount
+                SELECT count(contactId) AS userCount
                 FROM contactTable
                 WHERE _createdBy = < cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar" >
-                    AND emailId = < cfqueryparam value = '#arguments.email#' cfsqltype = "cf_sql_varchar" >
-                    OR phoneNumber = < cfqueryparam value = '#arguments.phone#' cfsqltype = "cf_sql_varchar" >
+                    AND contactId != < cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_varchar" >
+                    AND (emailId = < cfqueryparam value = '#arguments.email#' cfsqltype = "cf_sql_varchar" >
+                    OR phoneNumber = < cfqueryparam value = '#arguments.phone#' cfsqltype = "cf_sql_varchar" >);
             </cfquery>
-            <cfif userExists.userCount>
+            <cfif userEditExists.userCount GT 0>
                 <cfreturn true>
+                <cfelse>
+                    <cfreturn false>
             </cfif>
             <cfelse>
                 <cfreturn true>
@@ -183,7 +189,7 @@
         <cfreturn true>
     </cffunction>
 
-    <cffunction name="viewModal" access="remote" returnFormat="JSON"  returnType="struct">
+    <cffunction name="viewModal" access="remote" returnFormat="JSON" returnType="struct">
         <cfargument name="contactIdModal">
         <cfset local.structure = structNew()>
         <cfquery name="viewQuery">
