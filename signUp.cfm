@@ -78,8 +78,8 @@
                 nameConflict="MakeUnique"
                 result="fileName">
                 <cfset local.userProfileImage = local.filePath & filename.serverfile>
-<!---                 <cfset local.object = new Component.function()> --->
-                <cfset local.result = application.object.addUser(form.fullName,form.emailId,form.userName,form.password,local.userProfileImage)>
+                <cfset local.object = new Component.function()>
+                <cfset local.result = local.object.addUser(form.fullName,form.emailId,form.userName,form.password,local.userProfileImage)>
                 <cfif local.result EQ true>
                     <div class="text-center">
                         <div class="text-success fw-bold">User Registered Successfully<div>

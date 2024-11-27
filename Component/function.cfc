@@ -60,6 +60,54 @@
         </cfif>
     </cffunction>
 
+    <cffunction  name="ssoLoginUser" returntype="boolean">
+        <cfquery name="selectExistsEmailId">
+            SELECT count(emailId) AS emailCount
+            FROM userTable
+            WHERE emailId = < cfqueryparam value = '#session.ssoVariable.other.email#' cfsqltype = "cf_sql_varchar" >
+                AND loginType IS NULL 
+        </cfquery>
+        <cfquery name="selectEmailId">
+            SELECT count(emailId) AS emailSsoCount
+            FROM userTable
+            WHERE emailId = < cfqueryparam value = '#session.ssoVariable.other.email#' cfsqltype = "cf_sql_varchar" >
+                AND loginType = < cfqueryparam value = 'ssoGoogle' cfsqltype = "cf_sql_varchar" >
+        </cfquery>
+        <cfif selectExistsEmailId.emailCount GT 0>
+            <cfreturn false>
+            <cfelse>
+                <cfif selectEmailId.emailSsoCount EQ 0>
+                    <cfquery name=registerUser>
+                            INSERT INTO userTable (
+                                name
+                                ,username
+                                ,emailId
+                                ,profileImage
+                                ,loginType
+                                )
+                            VALUES (
+                                < cfqueryparam value = '#session.ssoVariable.name#' cfsqltype = "cf_sql_varchar" >
+                                ,< cfqueryparam value = '#session.ssoVariable.id#' cfsqltype = "cf_sql_varchar" >
+                                ,< cfqueryparam value = '#session.ssoVariable.other.email#' cfsqltype = "cf_sql_varchar" >
+                                ,< cfqueryparam value = '#session.ssoVariable.other.picture#' cfsqltype = "cf_sql_varchar" >
+                                ,< cfqueryparam value = 'ssoGoogle' cfsqltype = "cf_sql_varchar" >
+                                )
+                    </cfquery>
+                    <cfset session.userEmailId = session.ssoVariable.other.email>
+                    <cfset session.userName = session.ssoVariable.id>
+                    <cfset session.login = true>
+                    <cfreturn true>
+                    <cfelseif selectEmailId.emailSsoCount EQ 1>
+                        <cfset session.userEmailId = session.ssoVariable.other.email>
+                        <cfset session.userName = session.ssoVariable.id>
+                        <cfset session.login = true>
+                        <cfreturn true>
+                    <cfelse>
+                        <cfreturn false>
+                </cfif>
+        </cfif>
+    </cffunction>
+
     <cffunction name="checkUser" returnType="boolean">
         <cfargument name="email">
         <cfargument name="phone">

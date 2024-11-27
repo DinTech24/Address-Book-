@@ -56,7 +56,7 @@
                                             <a href="" class="me-2">
                                                 <img  width="40" src="./Assets/Images/FaceBook.png" alt="">
                                             </a>
-                                            <a href="">
+                                            <a name="googleSsoButton" href="./ssoLogin.cfm" >
                                                 <img width="40" src="./Assets/Images/GoogleIcon.png" alt="">
                                             </a>
                                         </div>
@@ -74,8 +74,8 @@
                 <div class="col-3"></div>
             </div>
             <cfif structKeyExists(form, "loginButton")>
-<!---                 <cfset local.object = new Component.function()> --->
-                <cfset local.result = application.object.loginUser(form.username,form.password)>
+                <cfset local.object = new Component.function()>
+                <cfset local.result = local.object.loginUser(form.username,form.password)>
                 <cfif local.result EQ false>
                     <div class="text-center">
                         <div class="text-danger fw-bold">Invalid Credentials<div>
@@ -87,5 +87,6 @@
                 </cfif>
             </cfif>
         </cfoutput>
+    <script src="./JavaScript/script.js"></script>
     </body>
 </html>
