@@ -3,16 +3,15 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Address_book_Home_Page</title>
         <link rel="stylesheet" href="./Bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="./Style/style.css">
         <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
     </head>
-    <body>
+    <body>       
         <cfset local.object = new Component.function()>
         <cfset local.result = local.object.displayHomepage()>
         <cfset local.contactResult = local.object.displayContact()>
-
         <cfoutput>
             <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog ">
@@ -198,7 +197,6 @@
                                             <button onclick="return addContact()" id="createSubmitId" type="submit" name="createSubmit" class="modalBtnClose">SUBMIT</button>
                                             <div id="userWarning" class="text-danger fw-bold mt-3"></div>
                                         </div>
-                                        
                                     </form>
                                 </div>
                             </div>
@@ -229,7 +227,59 @@
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10 ">
-                    <div class="bg-white mt-3 d-flex justify-content-end rounded">
+                    <div class="bg-white mt-3 d-flex justify-content-end rounded align-items-center">
+                        <cfif structKeyExists(form,"createSubmit")>                            
+                            <cfset local.checkResult = local.object.checkUser(form.emailId,form.phone)>
+                            <cfif local.checkResult EQ true>
+                                <div class="text-center">
+                                    <div class="text-danger fw-bold">This email Id / phone number cannot be used</div>
+                                </div>
+                                <cfelse>
+                                    <cfset local.structure = structNew()>
+                                    <cfset local.expandContactPath = "Assets/UploadedImages/">
+                                    <cfloop collection="#form#" item="item">
+                                        <cfset local.structure[item] = form[item]>
+                                    </cfloop>
+                                    <cfif form.profilePic EQ "">
+                                        <cfset local.profileImage = "Assets/Images/profileImage.png">
+                                        <cfelse>
+                                            <cffile  
+                                            action="upload"
+                                            filefield="form.profilePic"
+                                            destination="#expandPath(local.expandContactPath)#"
+                                            nameConflict="MakeUnique"
+                                            result="contactFile">
+                                            <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
+                                    </cfif>                                    
+                                    <cfset local.result = local.object.addContacts(local.structure,local.profileImage)>
+                            </cfif>
+                        </cfif>        
+                        <cfif structKeyExists(form,"editSubmit")>                            
+                            <cfset local.checkResult = local.object.checkEditUser(form.emailId,form.phone,form.editSubmit)>
+                            <cfif local.checkResult EQ true>
+                                <div class="text-center">
+                                    <div class="text-danger fw-bold">This email Id / phone number cannot be used</div>
+                                </div>
+                                <cfelse>
+                                    <cfset local.Newstructure = structNew()>
+                                    <cfset local.expandContactPath = "Assets/UploadedImages/">
+                                    <cfloop collection="#form#" item="item">
+                                        <cfset local.Newstructure[item] = form[item]>
+                                    </cfloop>
+                                    <cfif form.profilePic EQ "">
+                                        <cfset local.profileImage = "#form.hiddenProfilePic#">
+                                        <cfelse>
+                                            <cffile  
+                                            action="upload"
+                                            filefield="form.profilePic"
+                                            destination="#expandPath(local.expandContactPath)#"
+                                            nameConflict="MakeUnique"
+                                            result="contactFile">
+                                            <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
+                                    </cfif>                                    
+                                    <cfset local.result = local.object.editContacts(local.Newstructure,local.profileImage)>
+                            </cfif>
+                        </cfif>
                         <div class="py-2">
                             <form method="POST">
                                 <button class="ms-3 pdfPrintButton" type="submit" name="printPdfCall" onclick="return printToPdf()" ><img width="30" src="./Assets/Images/adobe.png" alt="1"></button>
@@ -269,51 +319,8 @@
                     </div>
                 </div>
                 <div class="col-1"></div>
-            </div>        
-            <cfif structKeyExists(form,"createSubmit")>
-                <cfset local.structure = structNew()>
-                <cfset local.expandContactPath = "Assets/UploadedImages/">
-                <cfloop collection="#form#" item="item">
-                    <cfset local.structure[item] = form[item]>
-                </cfloop>
-                <cfif form.profilePic EQ "">
-                    <cfset local.profileImage = "Assets/Images/profileImage.png">
-                    <cfelse>
-                        <cffile  
-                        action="upload"
-                        filefield="form.profilePic"
-                        destination="#expandPath(local.expandContactPath)#"
-                        nameConflict="MakeUnique"
-                        result="contactFile">
-                        <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
-                </cfif>
-                <cfset local.object = new Component.function()>
-                <cfset local.result = local.object.addContacts(local.structure,local.profileImage)>
-                <cfif local.result EQ false>
-                </cfif>
-            </cfif>
-            <cfif structKeyExists(form,"editSubmit")>
-                <cfset local.Newstructure = structNew()>
-                <cfset local.expandContactPath = "Assets/UploadedImages/">
-                <cfloop collection="#form#" item="item">
-                    <cfset local.Newstructure[item] = form[item]>
-                </cfloop>
-                <cfif form.profilePic EQ "">
-                    <cfset local.profileImage = "#form.hiddenProfilePic#">
-                    <cfelse>
-                        <cffile  
-                        action="upload"
-                        filefield="form.profilePic"
-                        destination="#expandPath(local.expandContactPath)#"
-                        nameConflict="MakeUnique"
-                        result="contactFile">
-                        <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
-                </cfif>
-                <cfset local.object = new Component.function()>
-                <cfset local.result = local.object.editContacts(local.Newstructure,local.profileImage)>
-            </cfif>
-            <cfif structKeyExists(form,"printPdfCall")>
-                <cfset local.object = new Component.function()>
+            </div>
+            <cfif structKeyExists(form,"printPdfCall")>                
                 <cfset local.result = local.object.printPdf()>
                 <cfdocument format="pdf" fileName="PrintedPDFs/printed.pdf" overwrite="true" orientation = "landscape">
                     <table border = "1"> 
