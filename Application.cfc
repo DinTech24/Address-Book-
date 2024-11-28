@@ -4,16 +4,13 @@
     <cfset this.dataSource = "myData">
     <cfset this.name = "MyApplication">
     <cfset this.applicationTimeout = createTimeSpan(0, 12, 0, 0)>
+    <cfset this.ormEnabled = true>
     
-<!---     <cffunction name="onApplicationStart" returntype="boolean" output="false">
-        <cfset application.object = new Component.function()>
-        <cfreturn true>
-    </cffunction> --->
 
 <!---     <cffunction  name="onError" returnType="void">
         <cfargument name="exception" type="string">
         <cfargument name="eventName" type="string">
-        <cflocation  url="./errorPage.cfm?error=#arguments.eventName#">
+        <cflocation  url="./errorPage.cfm?error=#arguments.exception#">
     </cffunction> --->
 
     <cffunction  name="onRequest">

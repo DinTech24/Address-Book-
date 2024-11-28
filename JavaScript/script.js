@@ -358,11 +358,6 @@ function addSpreadSheet(){
     
 }
 
-function ssoLogin(){
-    hidden = document.getElementById("hiddenDivision");
-    hidden.display="initial"
-}
-
 if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
 }

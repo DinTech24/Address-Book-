@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="./Style/style.css">
         <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
     </head>
-    <body>       
+    <body>        
         <cfset local.object = new Component.function()>
         <cfset local.result = local.object.displayHomepage()>
         <cfset local.contactResult = local.object.displayContact()>
@@ -302,7 +302,22 @@
                                 <div class="userContactsEmail">EMAIL ID</div>
                                 <div class="userContactsPhone">PHONE NUMBER</div>
                             </div>
-                            <cfloop query="#local.contactResult#">
+                            <cfset ormReload()>
+                            <cfset local.user = entityLoad("ormComponent")>
+                            <cfloop array="#local.user#" item="item">
+                                <form method="POST">
+                                    <div class="d-flex py-4 eachContact">
+                                        <img width="80" height="80" class="contactProfileImage me-4" src="#item.getprofileImage()#" alt="">
+                                        <div class="eachContactName">#item.getfirstName() &" "& item.getlastName()#</div>
+                                        <div class="eachContactMail">#item.getemailId()#</div>
+                                        <div class="eachContactNumber">#item.getphoneNumber()#</div>
+                                        <button class="eachContactButton" value="#item.getcontactId()#"  type="button" onclick="editContact(this)"  data-bs-toggle="modal"  data-bs-target="##staticBackdropEdit">EDIT</button>
+                                        <button class="eachContactButton" value="#item.getcontactId()#" onclick="deleteContact(this)" >DELETE</button>
+                                        <button name="viewContactDetails" value="#item.getcontactId()#" type="button" onclick="viewModalData(this)" class="eachContactButton" data-bs-toggle="modal" data-bs-target="##staticBackdrop">VIEW</button>
+                                    </div>
+                                </form>
+                            </cfloop>
+<!---                             <cfloop query="#local.contactResult#">
                                 <form method="POST">
                                     <div class="d-flex py-4 eachContact">
                                         <img width="80" height="80" class="contactProfileImage me-4" src="#local.contactResult.profileImage#" alt="">
@@ -314,7 +329,7 @@
                                         <button name="viewContactDetails" value="#local.contactResult.contactId#" type="button" onclick="viewModalData(this)" class="eachContactButton" data-bs-toggle="modal" data-bs-target="##staticBackdrop">VIEW</button>
                                     </div>
                                 </form>
-                            </cfloop>
+                            </cfloop> --->
                         </div>
                     </div>
                 </div>
