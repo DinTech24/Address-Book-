@@ -1,18 +1,13 @@
 <cfcomponent>
     <cfset this.sessionmanagement = true>
     <cfset this.dataSource = "myData">
-
-<!---     <cffunction  name="onApplicationStart">
-        <cfset application.object = createObject("component","Component.function")>
-    </cffunction>
-
-    <cffunction  name="onRequestStart">
-        <cfif structKeyExists(url,"reload") AND url.reload EQ 1>
-            <cfset onApplicationStart()>
-        </cfif>
-    </cffunction>
- --->
+    <cfset this.name = "MyApplication">
+    <cfset this.applicationTimeout = createTimeSpan(0, 12, 0, 0)>
     
+    <cffunction name="onApplicationStart" returntype="boolean" output="false">
+        <cfset application.object = new Component.function()>
+        <cfreturn true>
+    </cffunction>
 
     <cffunction  name="onRequest">
         <cfargument name="requestedPage" required="true">
