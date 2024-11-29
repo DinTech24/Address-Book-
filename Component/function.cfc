@@ -386,6 +386,32 @@
         </cfquery>
         <cfreturn printPdfQuery>
     </cffunction>
+    
+    <cffunction  name="scheduleWish">
+        <cfset local.dateToday = dateFormat(now(),"mm-dd")>
+        <cfquery name="selectDob">
+            select emailId,firstName,dateOfBirth from contactTable
+        </cfquery>
+        <cfloop query="selectDob">
+            <cfif dateFormat(selectDob.dateOfBirth,"mm-dd")>
+                <cfmail  from="dinilvallikunnil@gmail.com"  subject="Birthday Wishes"  to="#selectDob.emailId#" mimeattach="/Assets/Images/birthdayWish.jpg">
+                    Happy birthday dear #selectDob.firstName#
+                </cfmail>
+            </cfif>
+        </cfloop>
+    </cffunction>
+
+    <cffunction  name="scheduleTask">
+        <cfschedule  
+        action="update"  
+        task="schedule" 
+        operation="HTTPRequest" 
+        url="http://addressbook.org/scheduleEmail.cfm"
+        startDate="#dateFormat(now(),"yyyy-mm-dd")#"
+        interval="daily"
+        repeat="0"
+        overwrite="true">
+    </cffunction>
 
     <cffunction name="logout" access="remote" returnType="boolean">
         <cfset structClear(session)>

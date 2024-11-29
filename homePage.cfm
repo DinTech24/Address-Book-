@@ -303,7 +303,7 @@
                                 <div class="userContactsPhone">PHONE NUMBER</div>
                             </div>
                             <cfset ormReload()>
-                            <cfset local.user = entityLoad("ormComponent")>
+                            <cfset local.user = entityLoad("ormComponent",{_createdBy ="#session.username#"})>
                             <cfloop array="#local.user#" item="item">
                                 <form method="POST">
                                     <div class="d-flex py-4 eachContact">
@@ -317,19 +317,6 @@
                                     </div>
                                 </form>
                             </cfloop>
-<!---                             <cfloop query="#local.contactResult#">
-                                <form method="POST">
-                                    <div class="d-flex py-4 eachContact">
-                                        <img width="80" height="80" class="contactProfileImage me-4" src="#local.contactResult.profileImage#" alt="">
-                                        <div class="eachContactName">#local.contactResult.firstName &" "& local.contactResult.lastName#</div>
-                                        <div class="eachContactMail">#local.contactResult.emailId#</div>
-                                        <div class="eachContactNumber">#local.contactResult.phoneNUmber#</div>
-                                        <button class="eachContactButton" value="#local.contactResult.contactId#"  type="button" onclick="editContact(this)"  data-bs-toggle="modal"  data-bs-target="##staticBackdropEdit">EDIT</button>
-                                        <button class="eachContactButton" value="#local.contactResult.contactId#" onclick="deleteContact(this)" >DELETE</button>
-                                        <button name="viewContactDetails" value="#local.contactResult.contactId#" type="button" onclick="viewModalData(this)" class="eachContactButton" data-bs-toggle="modal" data-bs-target="##staticBackdrop">VIEW</button>
-                                    </div>
-                                </form>
-                            </cfloop> --->
                         </div>
                     </div>
                 </div>
@@ -378,6 +365,7 @@
                     </table>
                 </cfdocument>
             </cfif> 
+            
         </cfoutput>
         <script src="./JavaScript/script.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

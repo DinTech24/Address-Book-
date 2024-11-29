@@ -96,7 +96,7 @@ body{
 
 .profileBox{
     background-color: white;
-    width: 13vw;
+    width: 10vw;
 }
 
 .createContactbutton{
@@ -135,7 +135,7 @@ body{
 }
 
 .userContactsEmail{
-    margin-right: 10vw;
+    margin-right: 15vw;
 }
 
 .eachContact{
@@ -154,12 +154,12 @@ body{
 }
 
 .eachContactMail{
-    width: 15vw;
+    width: 20vw;
     text-align: left;
 }
 
 .eachContactNumber{
-    width: 10vw;
+    width: 8vw;
     text-align: left;
 }
 

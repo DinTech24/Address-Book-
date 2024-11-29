@@ -5,4 +5,5 @@
     <cfproperty  name="lastName">
     <cfproperty  name="emailId">
     <cfproperty  name="profileImage">
+    <cfproperty  name="_createdBy">
 </cfcomponent>
