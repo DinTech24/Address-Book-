@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Address_book_Home_Page</title>
+        <title>Address_Book_Home_Page</title>
         <link rel="stylesheet" href="./Bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="./Style/style.css">
         <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
