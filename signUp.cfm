@@ -70,17 +70,21 @@
                 <div class="col-3"></div>
             </div>
             <cfif structKeyExists(form,"signUpButton")>
-                <cfset local.filePath = "Assets/UploadedImages/">
+                <cfset filePath = "Assets/UploadedImages/">
                 <cffile  
                 filefield="form.profilePic"
                 action="upload" 
-                destination="#expandPath(local.filePath)#"
+                destination="#expandPath(filePath)#"
                 nameConflict="MakeUnique"
                 result="fileName">
-                <cfset local.userProfileImage = local.filePath & filename.serverfile>
-                <cfset local.object = new Component.function()>
-                <cfset local.result = local.object.addUser(form.fullName,form.emailId,form.userName,form.password,local.userProfileImage)>
-                <cfif local.result EQ true>
+                <cfset userProfileImage = filePath & filename.serverfile>
+                <cfset object = new Component.function()>
+                <cfset result = object.addUser(fullName = form.fullName,
+                                            emailId = form.emailId,
+                                            userName = form.userName,
+                                            password = form.password,
+                                            profilePicId = userProfileImage)>
+                <cfif result EQ true>
                     <div class="text-center">
                         <div class="text-success fw-bold">User Registered Successfully<div>
                     <div>
