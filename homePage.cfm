@@ -63,15 +63,15 @@
                                     <button type="button py-3" class="modalBtnClose " data-bs-dismiss="modal" aria-label="Close">CLOSE</button>
                                 </div>
                             </div>
-                                <div class="d-flex justify-content-center w-25 pt-5">
-                                    <div class="">
-                                        <img height="100" class="mt-5" id="viewModalProfilePic" src="./Assets/Images/addressProfilePic.jpeg" alt="">
-                                    </div>
+                            <div class="d-flex justify-content-center w-25 pt-5">
+                                <div class="">
+                                    <img height="100" class="mt-5" id="viewModalProfilePic" src="./Assets/Images/addressProfilePic.jpeg" alt="">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             <div class="modal fade" id="staticBackdropEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class=" editMainModal modal-content">
@@ -232,7 +232,7 @@
                             <cfset checkResult = object.checkUser(email = form.emailId,
                                                                 phone = form.phone)>
                             <cfif checkResult EQ true>
-                                <div class="text-center">
+                                <div class = "text-center">
                                     <div class="text-danger fw-bold">This email Id / phone number cannot be used</div>
                                 </div>
                                 <cfelse>
