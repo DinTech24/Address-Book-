@@ -197,7 +197,7 @@ body{
 
 .editMainModal{
     background-color: #DAEEF7;
-    width: 65vw;
+    width: 55vw;
 }
 
 .modalMainBody{
@@ -207,7 +207,6 @@ body{
 }
 .modalEditMainBody{
     background-color: white;
-
     width: 75%;
 }
 
@@ -282,6 +281,10 @@ body{
     border-top: #dddcdc 1px solid;
 }
 
+.nameFields{
+    width: 10vw;
+}
+
 .editContactPersonalInput:focus{
     outline: none;
 }
@@ -296,6 +299,10 @@ body{
 .createContactFields{
     font-weight: bold;
     color: #205f97;
+}
+
+.changePosition{
+    
 }
 
 .logoutButton{
