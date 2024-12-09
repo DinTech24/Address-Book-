@@ -265,7 +265,7 @@ function deleteContact(contactId){
     if(confirm("Are you sure to delete the contact?")){
         $.ajax({
             type:"POST",
-            url:"Component/function.cfc?method=deleteContact",
+            url:"Component/AddressBookMethods.cfc?method=deleteContact",
             data:{contactId:contactId.value},
             success:function(result){
                 if(result){
@@ -279,7 +279,7 @@ function deleteContact(contactId){
 function viewModalData(viewContact){
     $.ajax({
         type:"POST",
-        url:"Component/function.cfc?method=viewModal",
+        url:"Component/AddressBookMethods.cfc?method=viewModal",
         data:{contactIdModal:viewContact.value},
         success:function(result){
             var struct = JSON.parse(result);
@@ -299,7 +299,7 @@ function editContact(editId){
     document.getElementById("createSubmitId").name = "editSubmit";
     $.ajax({
         type:"POST",
-        url:"Component/function.cfc?method=viewModal",
+        url:"Component/AddressBookMethods.cfc?method=viewModal",
         data:{contactIdModal:editId.value},
         success:function(result){
             var struct = JSON.parse(result);
@@ -337,7 +337,7 @@ function pageLogout(){
     if(confirm("Confirm to logout")){
         $.ajax({
             type:"POST",
-            url:"Component/function.cfc?method=logout",
+            url:"Component/AddressBookMethods.cfc?method=logout",
             success:function(result){
                 if(result){
                     location.reload();
@@ -368,7 +368,7 @@ function addSpreadSheet(){
     if(confirm("confirm to download spreadsheet")){
         $.ajax({
             type:"POST",
-            url:"Component/function.cfc?method=SpreadSheet",
+            url:"Component/AddressBookMethods.cfc?method=SpreadSheet",
         })
         alert("Spreadsheet downloaded")
     }

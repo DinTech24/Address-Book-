@@ -1,2 +1,2 @@
-<cfset object = new Component.function()>
+<cfset object = new Component.AddressBookMethods()>
 <cfset object.scheduleWish()>

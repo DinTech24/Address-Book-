@@ -74,7 +74,7 @@
                 <div class="col-3"></div>
             </div>
             <cfif structKeyExists(form, "loginButton")>
-                <cfset object = new Component.function()>
+                <cfset object = new Component.AddressBookMethods()>
                 <cfset result = object.loginUser(userName = form.username,
                                                 password =  form.password)>
                 <cfif result EQ false>
