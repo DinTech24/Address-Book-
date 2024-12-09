@@ -16,18 +16,18 @@
             <cfelse>
                 <cfquery name=registerUser>
                     INSERT INTO userTable (
-                        name
-                        ,emailId
-                        ,username
-                        ,password
-                        ,profileImage
+                        name,
+                        emailId,
+                        username,
+                        password,
+                        profileImage
                         )
                     VALUES (
-                        < cfqueryparam value = '#arguments.fullName#' cfsqltype = "cf_sql_varchar" >
-                        ,< cfqueryparam value = '#arguments.emailId#' cfsqltype = "cf_sql_varchar" >
-                        ,< cfqueryparam value = '#arguments.userName#' cfsqltype = "cf_sql_varchar" >
-                        ,< cfqueryparam value = '#local.encryptedPassword#' cfsqltype = "cf_sql_varchar" >
-                        ,< cfqueryparam value = '#arguments.profilePicId#' cfsqltype = "cf_sql_varchar" >
+                        < cfqueryparam value = '#arguments.fullName#' cfsqltype = "cf_sql_varchar" >,
+                        < cfqueryparam value = '#arguments.emailId#' cfsqltype = "cf_sql_varchar" >,
+                        < cfqueryparam value = '#arguments.userName#' cfsqltype = "cf_sql_varchar" >,
+                        < cfqueryparam value = '#local.encryptedPassword#' cfsqltype = "cf_sql_varchar" >,
+                        < cfqueryparam value = '#arguments.profilePicId#' cfsqltype = "cf_sql_varchar" >
                         )
                 </cfquery>
         </cfif>
@@ -78,20 +78,20 @@
             <cfelse>
                 <cfif selectEmailId.emailSsoCount EQ 0>
                     <cfquery name=registerUser>
-                            INSERT INTO userTable (
-                                name
-                                ,username
-                                ,emailId
-                                ,profileImage
-                                ,loginType
-                                )
-                            VALUES (
-                                < cfqueryparam value = '#session.ssoVariable.name#' cfsqltype = "cf_sql_varchar" >
-                                ,< cfqueryparam value = '#session.ssoVariable.id#' cfsqltype = "cf_sql_varchar" >
-                                ,< cfqueryparam value = '#session.ssoVariable.other.email#' cfsqltype = "cf_sql_varchar" >
-                                ,< cfqueryparam value = '#session.ssoVariable.other.picture#' cfsqltype = "cf_sql_varchar" >
-                                ,< cfqueryparam value = 'ssoGoogle' cfsqltype = "cf_sql_varchar" >
-                                )
+                        INSERT INTO userTable (
+                            name,
+                            username,
+                            emailId,
+                            profileImage,
+                            loginType
+                            )
+                        VALUES (
+                            < cfqueryparam value = '#session.ssoVariable.name#' cfsqltype = "cf_sql_varchar" >,
+                            < cfqueryparam value = '#session.ssoVariable.id#' cfsqltype = "cf_sql_varchar" >,
+                            < cfqueryparam value = '#session.ssoVariable.other.email#' cfsqltype = "cf_sql_varchar" >,
+                            < cfqueryparam value = '#session.ssoVariable.other.picture#' cfsqltype = "cf_sql_varchar" >,
+                            < cfqueryparam value = 'ssoGoogle' cfsqltype = "cf_sql_varchar" >
+                            )
                     </cfquery>
                     <cfset session.userEmailId = session.ssoVariable.other.email>
                     <cfset session.userName = session.ssoVariable.id>
@@ -157,40 +157,40 @@
         <cfargument name="profilePic">
         <cfquery name="addContact">
             INSERT INTO contactTable (
-                title
-                ,firstName
-                ,lastName
-                ,gender
-                ,dateOfBirth
-                ,profileImage
-                ,address
-                ,street
-                ,district
-                ,STATE
-                ,country
-                ,pincode
-                ,emailId
-                ,phoneNumber
-                ,_createdBy
-                ,_createdOn
+                title,
+                firstName,
+                lastName,
+                gender,
+                dateOfBirth,
+                profileImage,
+                address,
+                street,
+                district,
+                STATE,
+                country,
+                pincode,
+                emailId,
+                phoneNumber,
+                _createdBy,
+                _createdOn
                 )
             VALUES (
-                < cfqueryparam value = '#arguments.structure["selectTitle"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["firstName"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["lastName"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["selectGender"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["dob"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.profilePic#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["address"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["street"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["district"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["state"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["country"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["pinCode"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["emailId"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#arguments.structure["phone"]#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar" >
-                ,< cfqueryparam value = '#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype = "cf_sql_date" >
+                < cfqueryparam value = '#arguments.structure["selectTitle"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["firstName"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["lastName"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["selectGender"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["dob"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.profilePic#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["address"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["street"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["district"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["state"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["country"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["pinCode"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["emailId"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#arguments.structure["phone"]#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar" >,
+                < cfqueryparam value = '#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype = "cf_sql_date" >
                 )
         </cfquery>
         <cflocation url="./homePage.cfm">
@@ -215,12 +215,12 @@
 
     <cffunction name="displayContact" returnType="query">
         <cfquery name="addContact">
-            SELECT contactId
-                ,firstName
-                ,lastName
-                ,emailId
-                ,phoneNumber
-                ,profileImage
+            SELECT contactId,
+                firstName,
+                lastName,
+                emailId,
+                phoneNumber,
+                profileImage
             FROM contactTable
             WHERE _createdBy = < cfqueryparam value = '#session.userName#' cfsqltype = "cf_sql_varchar" >
         </cfquery>
@@ -241,20 +241,20 @@
         <cfargument name="contactIdModal">
         <cfset local.structure = structNew()>
         <cfquery name="viewQuery">
-            SELECT title
-                ,firstName
-                ,lastName
-                ,gender
-                ,dateOfBirth
-                ,profileImage
-                ,address
-                ,street
-                ,district
-                ,STATE
-                ,country
-                ,pincode
-                ,emailId
-                ,phoneNumber
+            SELECT title,
+                firstName,
+                lastName,
+                gender,
+                dateOfBirth,
+                profileImage,
+                address,
+                street,
+                district,
+                STATE,
+                country,
+                pincode,
+                emailId,
+                phoneNumber
             FROM contactTable
             WHERE ContactId = < cfqueryparam value = '#arguments.contactIdModal#' cfsqltype = "cf_sql_varchar" >
         </cfquery>
@@ -279,20 +279,20 @@
         <cfargument  name="contactId">
         <cfset local.structure = structNew()>
         <cfquery name="editModalQuery">
-            SELECT title
-                ,firstName
-                ,lastName
-                ,gender
-                ,dateOfBirth
-                ,profileImage
-                ,address
-                ,street
-                ,district
-                ,STATE
-                ,country
-                ,pincode
-                ,emailId
-                ,phoneNumber
+            SELECT title,
+                firstName,
+                lastName,
+                gender,
+                dateOfBirth,
+                profileImage,
+                address,
+                street,
+                district,
+                STATE,
+                country,
+                pincode,
+                emailId,
+                phoneNumber
             FROM contactTable
             WHERE ContactId = < cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_varchar" >
         </cfquery>
@@ -319,75 +319,64 @@
         <cfargument name="profilePic">
         <cfquery name="editContact">
             UPDATE contactTable
-            SET title = < cfqueryparam value = '#arguments.structure["selectTitle"]#' cfsqltype = "cf_sql_varchar" >
-                ,firstName = < cfqueryparam value = '#arguments.structure["firstName"]#' cfsqltype = "cf_sql_varchar" >
-                ,lastName = < cfqueryparam value = '#arguments.structure["lastName"]#' cfsqltype = "cf_sql_varchar" >
-                ,gender = < cfqueryparam value = '#arguments.structure["selectGender"]#' cfsqltype = "cf_sql_varchar" >
-                ,dateOfBirth = < cfqueryparam value = '#arguments.structure["dob"]#' cfsqltype = "cf_sql_varchar" >
-                ,profileImage = < cfqueryparam value = '#arguments.profilePic#' cfsqltype = "cf_sql_varchar" >
-                ,address = < cfqueryparam value = '#arguments.structure["address"]#' cfsqltype = "cf_sql_varchar" >
-                ,street = < cfqueryparam value = '#arguments.structure["street"]#' cfsqltype = "cf_sql_varchar" >
-                ,district = < cfqueryparam value = '#arguments.structure["district"]#' cfsqltype = "cf_sql_varchar" >
-                ,state = < cfqueryparam value = '#arguments.structure["state"]#' cfsqltype = "cf_sql_varchar" >
-                ,country = < cfqueryparam value = '#arguments.structure["country"]#' cfsqltype = "cf_sql_varchar" >
-                ,pincode = < cfqueryparam value = '#arguments.structure["pinCode"]#' cfsqltype = "cf_sql_varchar" >
-                ,emailId = < cfqueryparam value = '#arguments.structure["emailId"]#' cfsqltype = "cf_sql_varchar" >
-                ,phoneNumber = < cfqueryparam value = '#arguments.structure["phone"]#' cfsqltype = "cf_sql_varchar" >
-                ,_UpdatedOn = < cfqueryparam value = '#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype = "cf_sql_varchar" >
+            SET title = < cfqueryparam value = '#arguments.structure["selectTitle"]#' cfsqltype = "cf_sql_varchar" >,
+                firstName = < cfqueryparam value = '#arguments.structure["firstName"]#' cfsqltype = "cf_sql_varchar" >,
+                lastName = < cfqueryparam value = '#arguments.structure["lastName"]#' cfsqltype = "cf_sql_varchar" >,
+                gender = < cfqueryparam value = '#arguments.structure["selectGender"]#' cfsqltype = "cf_sql_varchar" >,
+                dateOfBirth = < cfqueryparam value = '#arguments.structure["dob"]#' cfsqltype = "cf_sql_varchar" >,
+                profileImage = < cfqueryparam value = '#arguments.profilePic#' cfsqltype = "cf_sql_varchar" >,
+                address = < cfqueryparam value = '#arguments.structure["address"]#' cfsqltype = "cf_sql_varchar" >,
+                street = < cfqueryparam value = '#arguments.structure["street"]#' cfsqltype = "cf_sql_varchar" >,
+                district = < cfqueryparam value = '#arguments.structure["district"]#' cfsqltype = "cf_sql_varchar" >,
+                STATE = < cfqueryparam value = '#arguments.structure["state"]#' cfsqltype = "cf_sql_varchar" >,
+                country = < cfqueryparam value = '#arguments.structure["country"]#' cfsqltype = "cf_sql_varchar" >,
+                pincode = < cfqueryparam value = '#arguments.structure["pinCode"]#' cfsqltype = "cf_sql_varchar" >,
+                emailId = < cfqueryparam value = '#arguments.structure["emailId"]#' cfsqltype = "cf_sql_varchar" >,
+                phoneNumber = < cfqueryparam value = '#arguments.structure["phone"]#' cfsqltype = "cf_sql_varchar" >,
+                _UpdatedOn = < cfqueryparam value = '#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype = "cf_sql_varchar" >
             WHERE contactId = < cfqueryparam value = '#arguments.structure["editSubmit"]#' cfsqltype = "cf_sql_varchar" >
         </cfquery>
         <cflocation url="./homePage.cfm">
     </cffunction>
 
-    <cffunction name="SpreadSheet" access="remote">
-        <cfquery name="spreadSheetQuery">
-            SELECT title
-                ,firstName
-                ,lastName
-                ,gender
-                ,dateOfBirth
-                ,profileImage
-                ,address
-                ,street
-                ,district
-                ,STATE
-                ,country
-                ,pincode
-                ,emailId
-                ,phoneNumber
-                ,_createdBy
+    <cffunction  name="getAllDetails">
+        <cfquery name="getDetailsQuery">
+            SELECT title,
+                firstName,
+                lastName,
+                gender,
+                dateOfBirth,
+                profileImage,
+                address,
+                street,
+                district,
+                STATE,
+                country,
+                pincode,
+                emailId,
+                phoneNumber,
+                _createdBy
             FROM contactTable
             WHERE _createdBy = < cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar" >
         </cfquery>
+        <cfreturn getDetailsQuery>
+    </cffunction>
+
+    <cffunction name="SpreadSheet" access="remote" returnType="void">
+        <cfset local.object = new Component.function()>
+        <cfset local.details = local.object.getAllDetails()>
         <cfset local.spreadSheet= CreateUUID() & ".xlsx">
         <cfset local.filePath = ExpandPath("../Spreadsheets/"&local.spreadSheet)>
-        <cfspreadsheet action="write" query="spreadSheetQuery" filename="#local.filePath#" overwrite="no">
+        <cfspreadsheet action="write" query="local.details" filename="#local.filePath#" overwrite="no">
     </cffunction>
 
     <cffunction name="printPdf" returnType="query">
-        <cfquery name="printPdfQuery" >
-            SELECT title
-                ,firstName
-                ,lastName
-                ,gender
-                ,dateOfBirth
-                ,profileImage
-                ,address
-                ,street
-                ,district
-                ,STATE
-                ,country
-                ,pincode
-                ,emailId
-                ,phoneNumber
-                ,_createdBy
-            FROM contactTable
-            WHERE _createdBy = < cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar" >
-        </cfquery>
-        <cfreturn printPdfQuery>
+        <cfset local.object = new Component.function()>
+        <cfset local.details = local.object.getAllDetails()>
+        <cfreturn local.details>
     </cffunction>
-    
-    <cffunction  name="scheduleWish">
+
+    <cffunction  name="scheduleWish" returnType="void">
         <cfset local.dateToday = dateFormat(now(),"mm-dd")>
         <cfquery name="selectDob">
             select emailId,firstName,dateOfBirth from contactTable
@@ -401,7 +390,7 @@
         </cfloop>
     </cffunction>
 
-    <cffunction  name="scheduleTask">
+    <cffunction  name="scheduleTask" returnType="void">
         <cfschedule  
         action="update"  
         task="schedule" 

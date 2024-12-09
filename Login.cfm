@@ -74,9 +74,10 @@
                 <div class="col-3"></div>
             </div>
             <cfif structKeyExists(form, "loginButton")>
-                <cfset local.object = new Component.function()>
-                <cfset local.result = local.object.loginUser(form.username,form.password)>
-                <cfif local.result EQ false>
+                <cfset object = new Component.function()>
+                <cfset result = object.loginUser(userName = form.username,
+                                                password =  form.password)>
+                <cfif result EQ false>
                     <div class="text-center">
                         <div class="text-danger fw-bold">Invalid Credentials<div>
                     <div>

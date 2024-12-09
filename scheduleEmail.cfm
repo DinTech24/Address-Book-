@@ -1,2 +1,2 @@
-<cfset local.object = new Component.function()>
-<cfset local.object.scheduleWish()>
+<cfset object = new Component.function()>
+<cfset object.scheduleWish()>

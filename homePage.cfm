@@ -9,9 +9,9 @@
         <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
     </head>
     <body>        
-        <cfset local.object = new Component.function()>
-        <cfset local.result = local.object.displayHomepage()>
-        <cfset local.contactResult = local.object.displayContact()>
+        <cfset object = new Component.function()>
+        <cfset result = object.displayHomepage()>
+        <cfset contactResult = object.displayContact()>
         <cfoutput>
             <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog ">
@@ -229,55 +229,60 @@
                 <div class="col-10 ">
                     <div class="bg-white mt-3 d-flex justify-content-end rounded align-items-center">
                         <cfif structKeyExists(form,"createSubmit")>                            
-                            <cfset local.checkResult = local.object.checkUser(form.emailId,form.phone)>
-                            <cfif local.checkResult EQ true>
+                            <cfset checkResult = object.checkUser(email = form.emailId,
+                                                                phone = form.phone)>
+                            <cfif checkResult EQ true>
                                 <div class="text-center">
                                     <div class="text-danger fw-bold">This email Id / phone number cannot be used</div>
                                 </div>
                                 <cfelse>
-                                    <cfset local.structure = structNew()>
-                                    <cfset local.expandContactPath = "Assets/UploadedImages/">
+                                    <cfset structure = structNew()>
+                                    <cfset expandContactPath = "Assets/UploadedImages/">
                                     <cfloop collection="#form#" item="item">
-                                        <cfset local.structure[item] = form[item]>
+                                        <cfset structure[item] = form[item]>
                                     </cfloop>
                                     <cfif form.profilePic EQ "">
-                                        <cfset local.profileImage = "Assets/Images/profileImage.png">
+                                        <cfset profileImage = "Assets/Images/profileImage.png">
                                         <cfelse>
                                             <cffile  
                                             action="upload"
                                             filefield="form.profilePic"
-                                            destination="#expandPath(local.expandContactPath)#"
+                                            destination="#expandPath(expandContactPath)#"
                                             nameConflict="MakeUnique"
                                             result="contactFile">
-                                            <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
+                                            <cfset profileImage = expandContactPath & contactFile.serverfile>
                                     </cfif>                                    
-                                    <cfset local.result = local.object.addContacts(local.structure,local.profileImage)>
+                                    <cfset result = object.addContacts(structure = structure,
+                                                                    profilePic = profileImage)>
                             </cfif>
                         </cfif>        
                         <cfif structKeyExists(form,"editSubmit")>                            
-                            <cfset local.checkResult = local.object.checkEditUser(form.emailId,form.phone,form.editSubmit)>
-                            <cfif local.checkResult EQ true>
+                            <cfset checkResult = object.checkEditUser(email = form.emailId,
+                                                                    phone = form.phone,
+                                                                    contactId = form.editSubmit)>
+                            <cfif checkResult EQ true>
                                 <div class="text-center">
                                     <div class="text-danger fw-bold">This email Id / phone number cannot be used</div>
                                 </div>
                                 <cfelse>
-                                    <cfset local.Newstructure = structNew()>
-                                    <cfset local.expandContactPath = "Assets/UploadedImages/">
+                                    <cfset Newstructure = structNew()>
+                                    <cfset expandContactPath = "Assets/UploadedImages/">
                                     <cfloop collection="#form#" item="item">
-                                        <cfset local.Newstructure[item] = form[item]>
+                                        <cfset Newstructure[item] = form[item]>
                                     </cfloop>
                                     <cfif form.profilePic EQ "">
-                                        <cfset local.profileImage = "#form.hiddenProfilePic#">
+                                        <cfset profileImage = "#form.hiddenProfilePic#">
                                         <cfelse>
                                             <cffile  
                                             action="upload"
                                             filefield="form.profilePic"
-                                            destination="#expandPath(local.expandContactPath)#"
+                                            destination="#expandPath(expandContactPath)#"
                                             nameConflict="MakeUnique"
                                             result="contactFile">
-                                            <cfset local.profileImage = local.expandContactPath & contactFile.serverfile>
+                                            <cfset profileImage = expandContactPath & contactFile.serverfile>
                                     </cfif>                                    
-                                    <cfset local.result = local.object.editContacts(local.Newstructure,local.profileImage)>
+                                    <cfset result = object.editContacts(structure = Newstructure,
+                                                                        profilepic = profileImage)>
                             </cfif>
                         </cfif>
                         <div class="py-2">
@@ -291,8 +296,8 @@
                     <div class="d-flex mt-3">
                         <div class="me-3">
                             <div class="text-center profileBox pt-3">
-                                <img width="100" src="#local.result.profileImage#" alt="">
-                                <div class="profileUserName">#local.result.name#</div>
+                                <img width="100" src="#result.profileImage#" alt="">
+                                <div class="profileUserName">#result.name#</div>
                                 <button data-bs-toggle="modal" onclick="createContact()" data-bs-target="##staticBackdropEdit" class="rounded-pill createContactbutton px-1 py-1">CREATE CONTACT</button>
                             </div>
                         </div>
@@ -303,8 +308,8 @@
                                 <div class="userContactsPhone">PHONE NUMBER</div>
                             </div>
                             <cfset ormReload()>
-                            <cfset local.user = entityLoad("ormComponent",{_createdBy ="#session.username#"})>
-                            <cfloop array="#local.user#" item="item">
+                            <cfset user = entityLoad("ormComponent",{_createdBy ="#session.username#"})>
+                            <cfloop array="#user#" item="item">
                                 <form method="POST">
                                     <div class="d-flex py-4 eachContact">
                                         <img width="80" height="80" class="contactProfileImage me-4" src="#item.getprofileImage()#" alt="">
@@ -323,7 +328,7 @@
                 <div class="col-1"></div>
             </div>
             <cfif structKeyExists(form,"printPdfCall")>                
-                <cfset local.result = local.object.printPdf()>
+                <cfset result = object.printPdf()>
                 <cfdocument format="pdf" fileName="PrintedPDFs/printed.pdf" overwrite="true" orientation = "landscape">
                     <table border = "1"> 
                         <tr>
@@ -343,23 +348,23 @@
                             <th>Phone Number</th>
                             <th>Created By</th>
                         </tr>
-                        <cfloop query="#local.result#">
+                        <cfloop query="#result#">
                             <tr>
-                                <td><img height="30" src="#local.result.profileImage#"></td> 
-                                <td>#local.result.title#</td> 
-                                <td>#local.result.firstName#</td> 
-                                <td>#local.result.lastName#</td> 
-                                <td>#local.result.gender#</td> 
-                                <td>#local.result.dateOfBirth#</td> 
-                                <td>#local.result.address#</td> 
-                                <td>#local.result.street#</td> 
-                                <td>#local.result.district#</td> 
-                                <td>#local.result.state#</td> 
-                                <td>#local.result.country#</td> 
-                                <td>#local.result.pincode#</td> 
-                                <td>#local.result.emailId#</td> 
-                                <td>#local.result.phoneNumber#</td> 
-                                <td>#local.result._createdBy#</td> 
+                                <td><img height="30" src="#result.profileImage#"></td> 
+                                <td>#result.title#</td> 
+                                <td>#result.firstName#</td> 
+                                <td>#result.lastName#</td> 
+                                <td>#result.gender#</td> 
+                                <td>#result.dateOfBirth#</td> 
+                                <td>#result.address#</td> 
+                                <td>#result.street#</td> 
+                                <td>#result.district#</td> 
+                                <td>#result.state#</td> 
+                                <td>#result.country#</td> 
+                                <td>#result.pincode#</td> 
+                                <td>#result.emailId#</td> 
+                                <td>#result.phoneNumber#</td> 
+                                <td>#result._createdBy#</td> 
                             </tr> 
                         </cfloop> 
                     </table>
