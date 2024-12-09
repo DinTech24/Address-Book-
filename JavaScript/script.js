@@ -104,6 +104,20 @@ function createContact(){
     document.getElementById("createSubmitId").name="createSubmit";
 }
 
+function formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 
 function addContact(){
     var title = document.getElementById("selectTitleId").value;
@@ -159,6 +173,9 @@ function addContact(){
 
     if(dateOfBirth === ""){
         document.getElementById("dateWarning").innerHTML = "add Date of birth";
+        flag = false;
+    }else if(dateOfBirth > formatDate()){
+        document.getElementById("dateWarning").innerHTML = "Date of birth should be valid";
         flag = false;
     }else{
         document.getElementById("dateWarning").innerHTML = "";
@@ -282,8 +299,8 @@ function editContact(editId){
     document.getElementById("createSubmitId").name = "editSubmit";
     $.ajax({
         type:"POST",
-        url:"Component/function.cfc?method=editModal",
-        data:{contactId:editId.value},
+        url:"Component/function.cfc?method=viewModal",
+        data:{contactIdModal:editId.value},
         success:function(result){
             var struct = JSON.parse(result);
             document.getElementById("createContactForm").reset();

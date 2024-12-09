@@ -8,8 +8,10 @@
         <cfargument  name="profilePicId">
         <cfset local.encryptedPassword = hash("#arguments.password#","sha-256","UTF-8")>
         <cfquery name="checkUserExists">
-            select count(username) as userCount from userTable 
-            where username = '#arguments.userName#' OR emailId = '#arguments.emailId#';
+            SELECT count(username) AS userCount
+            FROM userTable
+            WHERE username = '#arguments.userName#'
+                OR emailId = '#arguments.emailId#';
         </cfquery>
         <cfif checkUserExists.userCount>
             <cfreturn false>
@@ -134,6 +136,7 @@
         <cfargument name="phone">
         <cfargument name="contactId">
         <cfif arguments.email NEQ session.userEmailId>
+            <cfdump  var="#arguments.contactId#">
             <cfquery name="userEditExists">
                 SELECT count(contactId) AS userCount
                 FROM contactTable
@@ -203,13 +206,6 @@
             FROM userTable
             WHERE username = < cfqueryparam value = '#session.userName#' cfsqltype = "cf_sql_varchar" >
         </cfquery>
-        <cfquery name="addContact">
-            SELECT firstName
-                ,emailId
-                ,phoneNumber
-            FROM contactTable
-            WHERE _createdBy = < cfqueryparam value = '#session.userName#' cfsqltype = "cf_sql_varchar" >
-        </cfquery>
         <cfreturn displayUser>
     </cffunction>
 
@@ -262,7 +258,7 @@
         <cfset local.structure["firstName"] = viewQuery.firstName>
         <cfset local.structure["lastName"] = viewQuery.lastName>
         <cfset local.structure["gender"] = viewQuery.gender>
-        <cfset local.structure["dateOfBirth"] = dateFormat(viewQuery.dateOfBirth,"dd-mm-yyyy")>
+        <cfset local.structure["dateOfBirth"] = dateFormat(viewQuery.dateOfBirth,"yyyy-mm-dd")>
         <cfset local.structure["profileImage"] = viewQuery.profileImage>
         <cfset local.structure["address"] = viewQuery.address>
         <cfset local.structure["street"] = viewQuery.street>
@@ -272,45 +268,7 @@
         <cfset local.structure["pincode"] = viewQuery.pincode>
         <cfset local.structure["emailId"] = viewQuery.emailId>
         <cfset local.structure["phoneNumber"] = viewQuery.phoneNumber>
-        <cfreturn local.structure>
-    </cffunction>
-
-    <cffunction name="editModal"  access="remote" returnFormat="JSON" returnType="struct">
-        <cfargument  name="contactId">
-        <cfset local.structure = structNew()>
-        <cfquery name="editModalQuery">
-            SELECT title,
-                firstName,
-                lastName,
-                gender,
-                dateOfBirth,
-                profileImage,
-                address,
-                street,
-                district,
-                STATE,
-                country,
-                pincode,
-                emailId,
-                phoneNumber
-            FROM contactTable
-            WHERE ContactId = < cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_varchar" >
-        </cfquery>
-        <cfset local.structure["title"] = editModalQuery.title>
-        <cfset local.structure["firstName"] = editModalQuery.firstName>
-        <cfset local.structure["lastName"] = editModalQuery.lastName>
-        <cfset local.structure["gender"] = editModalQuery.gender>
-        <cfset local.structure["dateOfBirth"] =dateFormat(editModalQuery.dateOfBirth,"yyyy-mm-dd")>
-        <cfset local.structure["profileImage"] = editModalQuery.profileImage>
-        <cfset local.structure["address"] = editModalQuery.address>
-        <cfset local.structure["street"] = editModalQuery.street>
-        <cfset local.structure["state"] = editModalQuery.state>
-        <cfset local.structure["district"] = editModalQuery.district>
-        <cfset local.structure["country"] = editModalQuery.country>
-        <cfset local.structure["pincode"] = editModalQuery.pincode>
-        <cfset local.structure["emailId"] = editModalQuery.emailId>
-        <cfset local.structure["phoneNumber"] = editModalQuery.phoneNumber>
-        <cfset local.structure["createSubmitId"] = arguments.contactId>
+        <cfset local.structure["createSubmitId"] = arguments.contactIdModal>
         <cfreturn local.structure>
     </cffunction>
 
@@ -339,7 +297,7 @@
         <cflocation url="./homePage.cfm">
     </cffunction>
 
-    <cffunction  name="getAllDetails">
+    <cffunction  name="getAllDetails" returnType="query">
         <cfquery name="getDetailsQuery">
             SELECT title,
                 firstName,
@@ -363,16 +321,14 @@
     </cffunction>
 
     <cffunction name="SpreadSheet" access="remote" returnType="void">
-        <cfset local.object = new Component.function()>
-        <cfset local.details = local.object.getAllDetails()>
+        <cfset local.details = getAllDetails()>
         <cfset local.spreadSheet= CreateUUID() & ".xlsx">
         <cfset local.filePath = ExpandPath("../Spreadsheets/"&local.spreadSheet)>
         <cfspreadsheet action="write" query="local.details" filename="#local.filePath#" overwrite="no">
     </cffunction>
 
     <cffunction name="printPdf" returnType="query">
-        <cfset local.object = new Component.function()>
-        <cfset local.details = local.object.getAllDetails()>
+        <cfset local.details = getAllDetails()>
         <cfreturn local.details>
     </cffunction>
 
