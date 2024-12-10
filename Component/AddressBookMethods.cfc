@@ -194,6 +194,18 @@
                 <cfqueryparam value = '#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype = "cf_sql_date">
                 )
         </cfquery>
+        <cfloop list="#structure["roleSelector"]#" item="item" delimiters=",">
+            <cfquery name="enterRoles">
+                insert into contactsRoleTable values(
+                    <cfqueryparam value = '#item#' cfsqltype = "cf_sql_varchar">,
+                    (
+                        select contactId from contactTable 
+                        where emailId = <cfqueryparam value = '#arguments.structure["emailId"]#' cfsqltype = "cf_sql_varchar">
+                            AND _createdBy = <cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar">
+                    )
+                )
+            </cfquery>
+        </cfloop>
         <cflocation url="./homePage.cfm">
     </cffunction>
 
@@ -231,10 +243,51 @@
         <cfreturn true>
     </cffunction>
 
+    <cffunction  name="getAllDetails" returnType="query">
+        <cfargument  name="contactId" default="empty">
+        <cfquery name="getDetailsQuery">
+            SELECT title,
+                firstName,
+                lastName,
+                gender,
+                dateOfBirth,
+                profileImage,
+                address,
+                street,
+                district,
+                STATE,
+                country,
+                pincode,
+                emailId,
+                phoneNumber,
+                _createdBy,
+                contactId
+            FROM contactTable            
+            <cfif arguments.contactId EQ "empty">
+                WHERE _createdBy = <cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar">
+                <cfelse>
+                    WHERE ContactId = <cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_varchar">
+            </cfif>
+        </cfquery>
+        <cfreturn getDetailsQuery>
+    </cffunction>
+
+    <cffunction  name="joinRoles">
+        <cfargument name="contactIdModal">
+        <cfquery name="getRoleQuery">
+            select RoleTable.roleName,contactsRoleTable.roleId,contactsRoleTable.contactId from RoleTable 
+            inner join contactsRoleTable on RoleTable.roleId = contactsRoleTable.roleId 
+            where contactsRoleTable.contactId = <cfqueryparam value = '#arguments.contactIdModal#' cfsqltype = "cf_sql_varchar">
+        </cfquery>
+        <cfreturn getRoleQuery>
+    </cffunction>
+
     <cffunction name="viewModal" access="remote" returnFormat="JSON" returnType="struct">
         <cfargument name="contactIdModal">
         <cfset local.structure = structNew()>
-        <cfquery name="viewQuery">
+        <cfset local.viewQuery = getAllDetails()>
+        <cfset roleQuery = joinRoles(arguments.contactIdModal)>
+<!---         <cfquery name="viewQuery">
             SELECT title,
                 firstName,
                 lastName,
@@ -251,22 +304,26 @@
                 phoneNumber
             FROM contactTable
             WHERE ContactId = <cfqueryparam value = '#arguments.contactIdModal#' cfsqltype = "cf_sql_varchar">
-        </cfquery>
-        <cfset local.structure["title"] = viewQuery.title>
-        <cfset local.structure["firstName"] = viewQuery.firstName>
-        <cfset local.structure["lastName"] = viewQuery.lastName>
-        <cfset local.structure["gender"] = viewQuery.gender>
-        <cfset local.structure["dateOfBirth"] = dateFormat(viewQuery.dateOfBirth,"yyyy-mm-dd")>
-        <cfset local.structure["profileImage"] = viewQuery.profileImage>
-        <cfset local.structure["address"] = viewQuery.address>
-        <cfset local.structure["street"] = viewQuery.street>
-        <cfset local.structure["state"] = viewQuery.state>
-        <cfset local.structure["district"] = viewQuery.district>
-        <cfset local.structure["country"] = viewQuery.country>
-        <cfset local.structure["pincode"] = viewQuery.pincode>
-        <cfset local.structure["emailId"] = viewQuery.emailId>
-        <cfset local.structure["phoneNumber"] = viewQuery.phoneNumber>
+        </cfquery> --->
+        <cfset local.structure["title"] = local.viewQuery.title>
+        <cfset local.structure["firstName"] = local.viewQuery.firstName>
+        <cfset local.structure["lastName"] = local.viewQuery.lastName>
+        <cfset local.structure["gender"] = local.viewQuery.gender>
+        <cfset local.structure["dateOfBirth"] = dateFormat(local.viewQuery.dateOfBirth,"yyyy-mm-dd")>
+        <cfset local.structure["profileImage"] = local.viewQuery.profileImage>
+        <cfset local.structure["address"] = local.viewQuery.address>
+        <cfset local.structure["street"] = local.viewQuery.street>
+        <cfset local.structure["state"] = local.viewQuery.state>
+        <cfset local.structure["district"] = local.viewQuery.district>
+        <cfset local.structure["country"] = local.viewQuery.country>
+        <cfset local.structure["pincode"] = local.viewQuery.pincode>
+        <cfset local.structure["emailId"] = local.viewQuery.emailId>
+        <cfset local.structure["phoneNumber"] = local.viewQuery.phoneNumber>
         <cfset local.structure["createSubmitId"] = arguments.contactIdModal>
+        <cfset local.structure["roles"] = "">
+        <cfloop query="roleQuery">
+            <cfset local.structure["roles"] = local.structure["roles"] & "," & getRoleQuery.roleName>
+        </cfloop>
         <cfreturn local.structure>
     </cffunction>
 
@@ -295,7 +352,7 @@
         <cflocation url="./homePage.cfm">
     </cffunction>
 
-    <cffunction  name="getAllDetails" returnType="query">
+<!---     <cffunction  name="getAllDetails" returnType="query">
         <cfquery name="getDetailsQuery">
             SELECT title,
                 firstName,
@@ -316,7 +373,7 @@
             WHERE _createdBy = <cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar">
         </cfquery>
         <cfreturn getDetailsQuery>
-    </cffunction>
+    </cffunction> --->
 
     <cffunction name="SpreadSheet" access="remote" returnType="void">
         <cfset local.details = getAllDetails()>

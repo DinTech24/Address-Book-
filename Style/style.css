@@ -192,7 +192,7 @@ body{
 .editModal{
     background-color: #DAEEF7;
     height: 85.4vh;
-    width: 65vw;
+    width: 55vw;
 }
 
 .editMainModal{
@@ -301,8 +301,12 @@ body{
     color: #205f97;
 }
 
+.fixWidth{
+    width: 7vw;
+}
+
 .changePosition{
-    
+    margin-left: 12vw;
 }
 
 .logoutButton{
