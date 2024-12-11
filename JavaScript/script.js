@@ -334,6 +334,7 @@ function editContact(editId){
             document.getElementById("editModalId").src = struct.profileImage;
             document.getElementById("hiddenInput").value = struct.profileImage;
             document.getElementById("createSubmitId").value = struct.createSubmitId;
+            $("#rolesId").val(struct.joinQuery);
         }
     })
 }

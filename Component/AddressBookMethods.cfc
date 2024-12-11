@@ -235,6 +235,10 @@
 
     <cffunction name="deleteContact" access="remote" returnType="boolean">
         <cfargument name="contactId">
+        <cfquery name="deleteRoles">
+            delete from contactsRoleTable 
+            where contactId = <cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_varchar">
+        </cfquery>
         <cfquery name="deleteQuery">
             DELETE
             FROM contactTable
@@ -272,7 +276,7 @@
         <cfreturn getDetailsQuery>
     </cffunction>
 
-    <cffunction  name="joinRoles">
+    <cffunction  name="joinRoles" access="remote" returnFormat="JSON">
         <cfargument name="contactIdModal">
         <cfquery name="getRoleQuery">
             select RoleTable.roleName,contactsRoleTable.roleId,contactsRoleTable.contactId from RoleTable 
@@ -282,29 +286,19 @@
         <cfreturn getRoleQuery>
     </cffunction>
 
+    <cffunction  name="getRolesFunction">
+        <cfquery name = "getRolesQuery">
+            select roleId,roleName from roleTable;
+        </cfquery>
+        <cfreturn getRolesQuery>
+    </cffunction>
+
     <cffunction name="viewModal" access="remote" returnFormat="JSON" returnType="struct">
         <cfargument name="contactIdModal">
         <cfset local.structure = structNew()>
-        <cfset local.viewQuery = getAllDetails()>
-        <cfset roleQuery = joinRoles(arguments.contactIdModal)>
-<!---         <cfquery name="viewQuery">
-            SELECT title,
-                firstName,
-                lastName,
-                gender,
-                dateOfBirth,
-                profileImage,
-                address,
-                street,
-                district,
-                STATE,
-                country,
-                pincode,
-                emailId,
-                phoneNumber
-            FROM contactTable
-            WHERE ContactId = <cfqueryparam value = '#arguments.contactIdModal#' cfsqltype = "cf_sql_varchar">
-        </cfquery> --->
+        <cfset local.viewQuery = getAllDetails(arguments.contactIdModal)>
+        <cfset local.roleQuery = joinRoles(arguments.contactIdModal)>
+        <cfset local.roleIdArray = arrayNew(1)>
         <cfset local.structure["title"] = local.viewQuery.title>
         <cfset local.structure["firstName"] = local.viewQuery.firstName>
         <cfset local.structure["lastName"] = local.viewQuery.lastName>
@@ -320,9 +314,17 @@
         <cfset local.structure["emailId"] = local.viewQuery.emailId>
         <cfset local.structure["phoneNumber"] = local.viewQuery.phoneNumber>
         <cfset local.structure["createSubmitId"] = arguments.contactIdModal>
+        <cfloop query="#local.roleQuery#">
+            <cfset arrayAppend(local.roleIdArray, local.roleQuery.roleId)>
+        </cfloop>
+        <cfset local.structure["joinQuery"] = local.roleIdArray>
         <cfset local.structure["roles"] = "">
-        <cfloop query="roleQuery">
-            <cfset local.structure["roles"] = local.structure["roles"] & "," & getRoleQuery.roleName>
+        <cfloop query="local.roleQuery">
+            <cfif local.structure["roles"] EQ "">
+                <cfset local.structure["roles"] = local.structure["roles"] & getRoleQuery.roleName>
+                <cfelse>
+                    <cfset local.structure["roles"] = local.structure["roles"] & "," & getRoleQuery.roleName>
+            </cfif>
         </cfloop>
         <cfreturn local.structure>
     </cffunction>
@@ -349,36 +351,43 @@
                 _UpdatedOn = <cfqueryparam value = '#dateFormat(now(),"yyyy-mm-dd")#' cfsqltype = "cf_sql_varchar">
             WHERE contactId = <cfqueryparam value = '#arguments.structure["editSubmit"]#' cfsqltype = "cf_sql_varchar">
         </cfquery>
+        <cfquery name="deleteRoles">
+            delete from contactsRoleTable 
+            where contactId = <cfqueryparam value = '#arguments.structure["editSubmit"]#' cfsqltype = "cf_sql_varchar">
+        </cfquery>
+        <cfloop list="#structure["roleSelector"]#" item="item" delimiters=",">
+            <cfquery name="updateRoles">
+                insert into contactsRoleTable values(
+                    <cfqueryparam value = '#item#' cfsqltype = "cf_sql_varchar">,
+                    (
+                        select contactId from contactTable 
+                        where emailId = <cfqueryparam value = '#arguments.structure["emailId"]#' cfsqltype = "cf_sql_varchar">
+                            AND _createdBy = <cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar">
+                    )
+                )
+            </cfquery>
+        </cfloop>
         <cflocation url="./homePage.cfm">
     </cffunction>
 
-<!---     <cffunction  name="getAllDetails" returnType="query">
-        <cfquery name="getDetailsQuery">
-            SELECT title,
-                firstName,
-                lastName,
-                gender,
-                dateOfBirth,
-                profileImage,
-                address,
-                street,
-                district,
-                STATE,
-                country,
-                pincode,
-                emailId,
-                phoneNumber,
-                _createdBy
-            FROM contactTable
-            WHERE _createdBy = <cfqueryparam value = '#session.username#' cfsqltype = "cf_sql_varchar">
-        </cfquery>
-        <cfreturn getDetailsQuery>
-    </cffunction> --->
-
     <cffunction name="SpreadSheet" access="remote" returnType="void">
         <cfset local.details = getAllDetails()>
-        <cfset local.spreadSheet= CreateUUID() & ".xlsx">
-        <cfset local.filePath = ExpandPath("../Spreadsheets/"&local.spreadSheet)>
+        <cfset local.spreadSheet = "#local.details._createdBy# -" & "#dateTimeFormat(now(),"dd-mm-yyy-HH.nn.ss")#" & ".xlsx">
+        <cfset local.filePath = ExpandPath("../Spreadsheets/" & #local.spreadSheet#)>
+        <cfset local.rolesArray = arrayNew(1)>
+        <cfloop query="local.details">
+            <cfset local.getRolQuery = joinRoles(local.details.contactId)>
+            <cfset local.role = "">
+            <cfloop query="local.getRolQuery">
+                <cfif local.role EQ "">
+                    <cfset local.role = local.role & getRolQuery.roleName>
+                    <cfelse>
+                        <cfset local.role = local.role & "," & getRolQuery.roleName>
+                </cfif>
+            </cfloop>
+            <cfset arrayAppend(local.rolesArray,local.role)>
+        </cfloop>
+        <cfset queryAddColumn(local.details, "Roles", local.rolesArray)>
         <cfspreadsheet action="write" query="local.details" filename="#local.filePath#" overwrite="no">
     </cffunction>
 

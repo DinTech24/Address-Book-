@@ -208,11 +208,12 @@
                                         <div class="d-flex mb-3 mt-3">
                                             <div class="createContactFields fixWidth">Roles <span>*</span></div>
                                         </div>
+                                        <cfset rolesAndId = object.getRolesFunction()>
                                         <div class="d-flex justify-content-between">
-                                            <select class="selectpicker w-100 editContactPersonalInput" name="roleSelector" id="rolesId" multiple data-live-search="true">
-                                                <option value="1">Role1</option>
-                                                <option value="2">Role2</option>
-                                                <option value="3">Role3</option>
+                                            <select class="w-100 editContactPersonalInput" name="roleSelector" id="rolesId" multiple data-live-search="true">
+                                                <cfloop query="rolesAndId">
+                                                    <option value="#rolesAndId.roleId#">#rolesAndId.roleName#</option>
+                                                </cfloop>
                                             </select>
                                         </div>
                                         <div id="rolesWarning" class="registerWarning"></div>
@@ -352,7 +353,7 @@
             </div>
             <cfif structKeyExists(form,"printPdfCall")>                
                 <cfset result = object.printPdf()>
-                <cfdocument format="pdf" fileName="PrintedPDFs/printed.pdf" overwrite="true" orientation = "landscape">
+                <cfdocument format="pdf" fileName="#result._createdBy#.pdf" overwrite="true" orientation = "landscape">
                     <table border = "1"> 
                         <tr>
                             <th>Profile Image</th>
@@ -369,13 +370,18 @@
                             <th>Pincode</th>
                             <th>EmailId</th>
                             <th>Phone Number</th>
+                            <th>Roles</th>
                             <th>Created By</th>
                         </tr>
                         <cfloop query="#result#">
                             <cfset getRole = object.joinRoles(result.contactId)>
                             <cfset rolesNames = "">
                             <cfloop query="getRole">
-                                <cfset rolesNames = rolesNames & "," & getRole.roleName>
+                                <cfif rolesNames EQ "">
+                                    <cfset rolesNames = rolesNames & getRole.roleName>
+                                    <cfelse>
+                                        <cfset rolesNames = rolesNames & "," & getRole.roleName>
+                                </cfif>
                             </cfloop>
                             <tr>
                                 <td><img height="30" src="#result.profileImage#"></td> 
