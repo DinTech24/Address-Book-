@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
     </head>
     <body>        
-        <cfset object = new Component.function()>
+        <cfset object = new Component.AddressBookMethods()>
         <cfset result = object.displayHomepage()>
         <cfset contactResult = object.displayContact()>
         <cfoutput>
@@ -88,7 +88,7 @@
                                         <div class="d-flex justify-content-between mb-3">
                                             <div class="createContactFields">Title <span>*</span></div>
                                             <div class="createContactFields">First Name <span>*</span></div>
-                                            <div class="createContactFields me-5">Last Name <span>*</span></div>
+                                            <div class="createContactFields">Last Name <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -100,17 +100,17 @@
                                                 <div id="titleWarning" class="registerWarning"></div>
                                             </div>
                                             <div>
-                                                <input name="firstName" id="firstNameId" class="editContactPersonalInput" placeholder="First Name" type="text">
+                                                <input name="firstName" id="firstNameId" class="editContactPersonalInput nameFields" placeholder="First Name" type="text">
                                                 <div id="firstWarning" class="registerWarning"></div>
                                             </div>
                                             <div>
-                                                <input name="lastName" id="lastNameId" class="editContactPersonalInput" placeholder="Last Name" type="text">
+                                                <input name="lastName" id="lastNameId" class="editContactPersonalInput nameFields" placeholder="Last Name" type="text">
                                                 <div id="lastWarning" class="registerWarning"></div>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between mb-3 mt-3">
                                             <div class="createContactFields">Gender <span>*</span></div>
-                                            <div class="me-5 createContactFields">Date Of Birth <span>*</span></div>
+                                            <div class="createContactFields">Date Of Birth <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between mb-3">
                                             <div>
@@ -139,7 +139,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between mb-3 mt-3">
                                             <div class="createContactFields">Address<span>*</span></div>
-                                            <div class="createContactFields">Street <span>*</span></div>
+                                            <div class="createContactFields changePosition">Street <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -153,7 +153,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between mb-3 mt-3">
                                             <div class="createContactFields">District <span>*</span></div>
-                                            <div class="createContactFields">State <span>*</span></div>
+                                            <div class="createContactFields changePosition">State <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -167,7 +167,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between mb-3 mt-3">
                                             <div class="createContactFields me-5">Country <span>*</span></div>
-                                            <div class="createContactFields me-5">Pincode <span>*</span></div>
+                                            <div class="createContactFields changePosition">Pincode <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>
@@ -181,7 +181,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between mb-3 mt-3">
                                             <div class="createContactFields me-5">Email Id <span>*</span></div>
-                                            <div class="createContactFields me-5">Phone <span>*</span></div>
+                                            <div class="createContactFields changePosition">Phone <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div>

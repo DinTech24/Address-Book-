@@ -78,7 +78,7 @@
                 nameConflict="MakeUnique"
                 result="fileName">
                 <cfset userProfileImage = filePath & filename.serverfile>
-                <cfset object = new Component.function()>
+                <cfset object = new Component.AddressBookMethods()>
                 <cfset result = object.addUser(fullName = form.fullName,
                                             emailId = form.emailId,
                                             userName = form.userName,
