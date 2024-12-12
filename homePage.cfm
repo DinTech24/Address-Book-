@@ -4,9 +4,16 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Address_Book_Home_Page</title>
+        <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="./Bootstrap/bootstrap.min.css">
         <link rel="stylesheet" href="./Style/style.css">
-        <link rel="stylesheet" href="./Font Awsome/fontawsome.css"/>
     </head>
     <body>        
         <cfset object = new Component.AddressBookMethods()>
@@ -57,6 +64,11 @@
                                         <div class="modalProfileHead">Phone</div>
                                         <div class="modalColon">&colon;</div>
                                         <div class="modalProfileData" id="viewModalPhone"></div>
+                                    </div>
+                                    <div class="profileEachDataDiv ">
+                                        <div class="modalProfileHead">Roles</div>
+                                        <div class="modalColon">&colon;</div>
+                                        <div class="modalProfileData" id="viewModalRole"></div>
                                     </div>
                                 </div>
                                 <div class="text-center">
@@ -137,8 +149,8 @@
                                         <div>
                                             <div class="mb-3 mt-2 personalDetailsHead">Contact Details</div>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-3 mt-3">
-                                            <div class="createContactFields">Address<span>*</span></div>
+                                        <div class="d-flex mb-3 mt-3">
+                                            <div class="createContactFields fixWidth">Address<span>*</span></div>
                                             <div class="createContactFields changePosition">Street <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
@@ -151,8 +163,8 @@
                                                 <div id="streetWarning" class="registerWarning"></div>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-3 mt-3">
-                                            <div class="createContactFields">District <span>*</span></div>
+                                        <div class="d-flex mb-3 mt-3">
+                                            <div class="createContactFields fixWidth">District <span>*</span></div>
                                             <div class="createContactFields changePosition">State <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
@@ -165,8 +177,8 @@
                                                 <div id="stateWarning" class="registerWarning"></div>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-3 mt-3">
-                                            <div class="createContactFields me-5">Country <span>*</span></div>
+                                        <div class="d-flex mb-3 mt-3">
+                                            <div class="createContactFields fixWidth">Country <span>*</span></div>
                                             <div class="createContactFields changePosition">Pincode <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
@@ -179,8 +191,8 @@
                                                 <div id="pincodeWarning" class="registerWarning"></div>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-3 mt-3">
-                                            <div class="createContactFields me-5">Email Id <span>*</span></div>
+                                        <div class="d-flex mb-3 mt-3">
+                                            <div class="createContactFields fixWidth">Email Id <span>*</span></div>
                                             <div class="createContactFields changePosition">Phone <span>*</span></div>
                                         </div>
                                         <div class="d-flex justify-content-between">
@@ -193,6 +205,17 @@
                                                 <div id="phoneWarning" class="registerWarning"></div>
                                             </div>
                                         </div>
+                                        <div class="d-flex mb-3 mt-3">
+                                            <div class="createContactFields fixWidth">Roles <span>*</span></div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <select class="selectpicker w-100 editContactPersonalInput" name="roleSelector" id="rolesId" multiple data-live-search="true">
+                                                <option value="1">Role1</option>
+                                                <option value="2">Role2</option>
+                                                <option value="3">Role3</option>
+                                            </select>
+                                        </div>
+                                        <div id="rolesWarning" class="registerWarning"></div>
                                         <div class="text-center mt-4">
                                             <button onclick="return addContact()" id="createSubmitId" type="submit" name="createSubmit" class="modalBtnClose">SUBMIT</button>
                                             <div id="userWarning" class="text-danger fw-bold mt-3"></div>
@@ -311,13 +334,13 @@
                             <cfset user = entityLoad("ormComponent",{_createdBy ="#session.username#"})>
                             <cfloop array="#user#" item="item">
                                 <form method="POST">
-                                    <div class="d-flex py-4 eachContact">
+                                    <div class="d-flex py-4 eachContact" id="#item.getcontactId()#">
                                         <img width="80" height="80" class="contactProfileImage me-4" src="#item.getprofileImage()#" alt="">
                                         <div class="eachContactName">#item.getfirstName() &" "& item.getlastName()#</div>
                                         <div class="eachContactMail">#item.getemailId()#</div>
                                         <div class="eachContactNumber">#item.getphoneNumber()#</div>
                                         <button class="eachContactButton" value="#item.getcontactId()#"  type="button" onclick="editContact(this)"  data-bs-toggle="modal"  data-bs-target="##staticBackdropEdit">EDIT</button>
-                                        <button class="eachContactButton" value="#item.getcontactId()#" onclick="deleteContact(this)" >DELETE</button>
+                                        <button class="eachContactButton" value="#item.getcontactId()#" type="button" onclick="deleteContact(this)" >DELETE</button>
                                         <button name="viewContactDetails" value="#item.getcontactId()#" type="button" onclick="viewModalData(this)" class="eachContactButton" data-bs-toggle="modal" data-bs-target="##staticBackdrop">VIEW</button>
                                     </div>
                                 </form>
@@ -349,6 +372,11 @@
                             <th>Created By</th>
                         </tr>
                         <cfloop query="#result#">
+                            <cfset getRole = object.joinRoles(result.contactId)>
+                            <cfset rolesNames = "">
+                            <cfloop query="getRole">
+                                <cfset rolesNames = rolesNames & "," & getRole.roleName>
+                            </cfloop>
                             <tr>
                                 <td><img height="30" src="#result.profileImage#"></td> 
                                 <td>#result.title#</td> 
@@ -364,6 +392,7 @@
                                 <td>#result.pincode#</td> 
                                 <td>#result.emailId#</td> 
                                 <td>#result.phoneNumber#</td> 
+                                <td>#rolesNames#</td> 
                                 <td>#result._createdBy#</td> 
                             </tr> 
                         </cfloop> 

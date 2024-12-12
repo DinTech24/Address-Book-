@@ -133,10 +133,22 @@ function addContact(){
     var pincode = document.getElementById("pincodeId").value;
     var emailId = document.getElementById("emailIds").value;
     var phone = document.getElementById("phoneId").value;
+    var role = document.getElementById("rolesId").value;
     var editModal = document.getElementById("createSubmitId").name;
+
+    
     var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     var phonePattern = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
     var flag = true;
+
+
+    if(role === ""){
+        document.getElementById("rolesWarning").innerHTML = "select roles";
+        flag = false;
+    }else{
+        document.getElementById("rolesWarning").innerHTML = "";
+    }
+
     if(title.trim() === ""){
         document.getElementById("titleWarning").innerHTML = "select title";
         flag = false;
@@ -269,7 +281,7 @@ function deleteContact(contactId){
             data:{contactId:contactId.value},
             success:function(result){
                 if(result){
-                    location.reload();
+                    document.getElementById(contactId.value).remove()
                 }
             }
         })
@@ -291,6 +303,7 @@ function viewModalData(viewContact){
             document.getElementById("viewModalEmail").innerHTML = struct.emailId;
             document.getElementById("viewModalPhone").innerHTML = struct.phoneNumber;
             document.getElementById("viewModalProfilePic").src = struct.profileImage;
+            document.getElementById("viewModalRole").innerHTML = struct.roles;
         }
     })
 }
@@ -331,6 +344,7 @@ function closeModal(){
         nodeList[i].innerHTML = "";
     }
     document.getElementById("userWarning").innerHTML =""
+    document.getElementById("rolesId").value = ""
 }
 
 function pageLogout(){
@@ -368,7 +382,7 @@ function addSpreadSheet(){
     if(confirm("confirm to download spreadsheet")){
         $.ajax({
             type:"POST",
-            url:"Component/AddressBookMethods.cfc?method=SpreadSheet",
+            url:"Component/AddressBookMethods.cfc?method=SpreadSheet"
         })
         alert("Spreadsheet downloaded")
     }
