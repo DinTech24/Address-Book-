@@ -210,7 +210,7 @@
                                         </div>
                                         <cfset rolesAndId = object.getRolesFunction()>
                                         <div class="d-flex justify-content-between">
-                                            <select class="w-100 editContactPersonalInput" name="roleSelector" id="rolesId" multiple data-live-search="true">
+                                            <select class="w-100 editContactPersonalInput selectPick" name="roleSelector" id="rolesId" multiple data-live-search="true">
                                                 <cfloop query="rolesAndId">
                                                     <option value="#rolesAndId.roleId#">#rolesAndId.roleName#</option>
                                                 </cfloop>
@@ -353,7 +353,7 @@
             </div>
             <cfif structKeyExists(form,"printPdfCall")>                
                 <cfset result = object.printPdf()>
-                <cfdocument format="pdf" fileName="#result._createdBy#.pdf" overwrite="true" orientation = "landscape">
+                <cfdocument format="pdf" fileName="PrintedPDFs/#result._createdBy# #dateTimeFormat(now(),'dd-mm-yyy-HH.nn.ss')#.pdf" overwrite="true" orientation = "landscape">
                     <table border = "1"> 
                         <tr>
                             <th>Profile Image</th>
@@ -374,15 +374,6 @@
                             <th>Created By</th>
                         </tr>
                         <cfloop query="#result#">
-                            <cfset getRole = object.joinRoles(result.contactId)>
-                            <cfset rolesNames = "">
-                            <cfloop query="getRole">
-                                <cfif rolesNames EQ "">
-                                    <cfset rolesNames = rolesNames & getRole.roleName>
-                                    <cfelse>
-                                        <cfset rolesNames = rolesNames & "," & getRole.roleName>
-                                </cfif>
-                            </cfloop>
                             <tr>
                                 <td><img height="30" src="#result.profileImage#"></td> 
                                 <td>#result.title#</td> 
@@ -398,7 +389,7 @@
                                 <td>#result.pincode#</td> 
                                 <td>#result.emailId#</td> 
                                 <td>#result.phoneNumber#</td> 
-                                <td>#rolesNames#</td> 
+                                <td>#result.roleName#</td> 
                                 <td>#result._createdBy#</td> 
                             </tr> 
                         </cfloop> 

@@ -324,3 +324,7 @@ body{
     border: none;
     background-color: transparent;
 }
+
+.selectPick{
+    height: 8vh;
+}

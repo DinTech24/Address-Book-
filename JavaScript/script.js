@@ -334,7 +334,7 @@ function editContact(editId){
             document.getElementById("editModalId").src = struct.profileImage;
             document.getElementById("hiddenInput").value = struct.profileImage;
             document.getElementById("createSubmitId").value = struct.createSubmitId;
-            $("#rolesId").val(struct.joinQuery);
+            $("#rolesId").val(struct.joinQuery.split(""));
         }
     })
 }
@@ -373,6 +373,7 @@ function printTable(){
 
 function printToPdf(){
     if(confirm("confirm to download PDF")){
+        alert("PDF downloaded")
         return true;
     }else{
         return false;
