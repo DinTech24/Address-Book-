@@ -102,10 +102,11 @@ body{
 .createContactbutton{
     font-size: 12px;
     background-color: #337AB7;
+    box-shadow: 1px 1px 1px black;
     color: white;
     font-weight: bold;
     border: none;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .profileUserName{
@@ -188,6 +189,19 @@ body{
 }
 
 /* Modal */
+
+.UploadModal{
+    background-color: #DAEEF7;
+    height: 50.4vh;
+    width: 70vw;
+}
+
+.modalUploadBody{
+    background-color: white;
+    height: 50vh;
+    width: 94%;
+    padding-left: 3vw;
+}
 
 .editModal{
     background-color: #DAEEF7;
@@ -327,4 +341,39 @@ body{
 
 .selectPick{
     height: 8vh;
+}
+
+.modalUploadClose{
+    color: #337AB7;
+    border: #337AB7 1px solid;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.templateButton{
+    font-size: 12px;
+}
+
+.uploadFileHead{
+    font-size: 20px;
+    font-weight: bold;
+    color:#337AB7;
+    border-bottom:2px solid #337AB7;
+}
+
+.modalBtnUpload{
+    font-size: bold;
+    color: white;
+    background-color: #205f97;
+    border: transparent;
+}
+
+.uploadText{
+    font-size: 14px;
+    font-weight: bold;
+    color: #337AB7;
+}
+
+.fileUpload{
+    width: 15vw;
 }

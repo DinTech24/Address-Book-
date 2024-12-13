@@ -232,13 +232,8 @@
     <cffunction name="deleteContact" access="remote" returnType="boolean">
         <cfargument name="contactId">
         <cfquery name="local.deleteRoles">
-            delete from contactsRoleTable 
-            where contactId = <cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_integer">
-        </cfquery>
-        <cfquery name="local.deleteQuery">
-            DELETE
-            FROM contactTable
-            WHERE contactId = <cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_varchar">
+            update contactTable set active = <cfqueryparam value = 0 cfsqltype = "cf_sql_integer"> 
+            WHERE contactId = <cfqueryparam value = '#arguments.contactId#' cfsqltype = "cf_sql_integer">;
         </cfquery>
         <cfreturn true>
     </cffunction>
@@ -290,16 +285,6 @@
                 _createdBy
         </cfquery>
         <cfreturn local.getDetailsQuery>
-    </cffunction>
-
-    <cffunction  name="joinRoles" access="remote" returnFormat="JSON">
-        <cfargument name="contactIdModal">
-        <cfquery name="local.getRoleQuery">
-            select RoleTable.roleName,contactsRoleTable.roleId,contactsRoleTable.contactId from RoleTable 
-            inner join contactsRoleTable on RoleTable.roleId = contactsRoleTable.roleId 
-            where contactsRoleTable.contactId = <cfqueryparam value = '#arguments.contactIdModal#' cfsqltype = "cf_sql_varchar">
-        </cfquery>
-        <cfreturn local.getRoleQuery>
     </cffunction>
 
     <cffunction  name="getRolesFunction">
