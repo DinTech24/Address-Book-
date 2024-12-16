@@ -334,7 +334,7 @@ function editContact(editId){
             document.getElementById("editModalId").src = struct.profileImage;
             document.getElementById("hiddenInput").value = struct.profileImage;
             document.getElementById("createSubmitId").value = struct.createSubmitId;
-            $("#rolesId").val(struct.joinQuery);
+            $("#rolesId").val(struct.joinQuery.split(""));
         }
     })
 }
@@ -373,6 +373,7 @@ function printTable(){
 
 function printToPdf(){
     if(confirm("confirm to download PDF")){
+        alert("PDF downloaded")
         return true;
     }else{
         return false;
@@ -388,6 +389,22 @@ function addSpreadSheet(){
         alert("Spreadsheet downloaded")
     }
     
+}
+
+function uploadSpreadsheet(){
+    var spreadsheetVar = document.getElementById("spreadSheetData").files[0];
+    var spreadsheet = new FormData();
+    spreadsheet.append("uploadedSpreadSheet",spreadsheetVar);
+    $.ajax({
+        type:"POST",
+        url:"Component/AddressBookMethods.cfc?method=convertToQuery",
+        data:spreadsheet,
+        contentType:false,
+        processData:false,
+        success:function(){
+            document.getElementById("disabledExcel").style.display = "initial"
+        }
+    })
 }
 
 if ( window.history.replaceState ) {
