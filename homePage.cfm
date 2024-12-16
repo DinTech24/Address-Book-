@@ -84,36 +84,36 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade " id="staticBackdropUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class=" UploadModal modal-content">
-                        <div class="d-flex justify-content-center">
-                            <div class="modalUploadBody">
-                                <div class="d-flex justify-content-end mt-4 me-2">
-                                    <button class="btn btn-primary templateButton">Template with data</button>
-                                    <button class="btn btn-success templateButton ms-2">Plain Template</button>
-                                </div>
-                                <div class="mt-4">
-                                    <span class="uploadFileHead ">Upload Excel File<span>
-                                </div>
-                                <div class="uploadText mt-3">Upload Excel *</div>
-                                <form method = "POST">
-                                    <div clas="d-flex">
-                                        <input type="file" class=" fileUpload">
-                                        <button class="btn">
-                                            <img src="./Assets/Images/downloadImage.png" height="30" alt="text">
-                                        </button>
+            <form method = "POST" type="multipart/form-data">
+                <div class="modal fade " id="staticBackdropUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class=" UploadModal modal-content">
+                            <div class="d-flex justify-content-center">
+                                <div class="modalUploadBody">
+                                    <div class="d-flex justify-content-end mt-4 me-2">
+                                        <button class="btn btn-primary templateButton" type="submit" onclick="addSpreadSheet()">Template with data</button>
+                                        <button class="btn btn-success templateButton ms-2" name="plainExcel">Plain Template</button>
                                     </div>
-                                </form>
-                                <div class="mt-5">
-                                    <button type="button" class="modalBtnUpload px-2 rounded-pill">SUBMIT</button>
-                                    <button type="button" class="px-2 rounded-pill modalUploadClose" data-bs-dismiss="modal" aria-label="Close">CLOSE</button>
+                                    <div class="mt-4">
+                                        <span class="uploadFileHead ">Upload Excel File<span>
+                                    </div>
+                                    <div class="uploadText mt-3">Upload Excel *</div>
+                                    <div clas="d-flex">
+                                        <input type="file" id="spreadSheetData" name="uploadedExcel" class=" fileUpload">
+                                        <a href="/Spreadsheets/dataSpreadSheet.xlsx" download class = "btn" name = "uploadFileButton" id="disabledExcel">
+                                            <img src="./Assets/Images/downloadImage.png" height="30" alt="text">
+                                        </a>
+                                    </div>
+                                    <div class="mt-5">
+                                        <button type="button" onclick="uploadSpreadsheet(spreadSheetData)" class="modalBtnUpload px-2 rounded-pill">SUBMIT</button>
+                                        <button type="button" class="px-2 rounded-pill modalUploadClose" data-bs-dismiss="modal" aria-label="Close">CLOSE</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <div class="modal fade" id="staticBackdropEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog ">
                     <div class=" editMainModal modal-content">
@@ -353,7 +353,7 @@
                                 <img width="100" src="#result.profileImage#" alt="">
                                 <div class="profileUserName">#result.name#</div>
                                 <button data-bs-toggle="modal" onclick="createContact()" data-bs-target="##staticBackdropEdit" class="rounded createContactbutton px-1 py-1">CREATE CONTACT</button>
-                                <button data-bs-toggle="modal" onclick="uploadContact()" data-bs-target="##staticBackdropUpload" class="rounded createContactbutton px-1 py-1">UPLOAD CONTACT</button>
+                                <button data-bs-toggle="modal" data-bs-target="##staticBackdropUpload" class="rounded createContactbutton px-1 py-1">UPLOAD CONTACT</button>
                             </div>
                         </div>
                         <div class="userAddedContacts px-2" id="contactsTable">
@@ -427,6 +427,10 @@
                     </table>
                 </cfdocument>
             </cfif> 
+
+            <cfif structKeyExists(form, "plainExcel")>
+                <cfset uploadResult = object.downloadExcel()>
+            </cfif>
             
         </cfoutput>
         <script src="./JavaScript/script.js"></script>

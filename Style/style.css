@@ -374,6 +374,10 @@ body{
     color: #337AB7;
 }
 
+#disabledExcel{
+    display: none;
+}
+
 .fileUpload{
     width: 15vw;
 }

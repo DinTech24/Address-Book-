@@ -391,6 +391,22 @@ function addSpreadSheet(){
     
 }
 
+function uploadSpreadsheet(){
+    var spreadsheetVar = document.getElementById("spreadSheetData").files[0];
+    var spreadsheet = new FormData();
+    spreadsheet.append("uploadedSpreadSheet",spreadsheetVar);
+    $.ajax({
+        type:"POST",
+        url:"Component/AddressBookMethods.cfc?method=convertToQuery",
+        data:spreadsheet,
+        contentType:false,
+        processData:false,
+        success:function(){
+            document.getElementById("disabledExcel").style.display = "initial"
+        }
+    })
+}
+
 if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
 }
