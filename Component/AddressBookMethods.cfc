@@ -375,14 +375,16 @@
     </cffunction>
 
     <cffunction  name="downloadExcelException">
-        <cfargument  name="exceptionQuery">
+        <cfargument name="exceptionQuery">
+
         <cfset exceptions = arrayNew(1)>
-        <cfloop query="arguments.exceptionQuery">
-            <cfif arguments.exceptionQuery.firstName EQ "">
-                <cfset arrayAppend(exceptions, "Empty Columns")>
-                <cfelse>
-                    <cfset arrayAppend(exceptions, "Row added")>
-            </cfif>
+        <cfloop query = "arguments.exceptionQuery">
+        <cfset dataArray = ["TITLE","FIRSTNAME","LASTNAME","GENDER","DATEOFBIRTH","ADDRESS","STREET","DISTRICT","STATE","COUNTRY","PINCODE","EMAILID"," "]>
+        <cfif arguments.exceptionQuery.firstName EQ "">
+            <cfset arrayAppend(exceptions, "Empty Columns")>
+            <cfelse>
+                <cfset arrayAppend(exceptions, "Row added")>
+        </cfif>
         </cfloop>
         <cfset queryAddColumn(arguments.exceptionQuery, "Exceptions",exceptions)>
         <cfspreadsheet action = "write" query = "arguments.exceptionQuery" filename = "#ExpandPath("../Spreadsheets/dataSpreadSheet.xlsx")#" overwrite="yes">
@@ -390,7 +392,7 @@
 
     <cffunction name="downloadExcel">
         <cfset local.rowAddedExcel = spreadsheetNew("name")>
-        <cfset spreadsheetAddRow(local.rowAddedExcel,'TITLE,FIRSTNAME,LASTNAME,GENDER,DATEOFBIRTH,PROFILEIMAGE,ADDRESS,STREET,DISTRICT,STATE,COUNTRY,PINCODE,EMAILID,PHONENUMBER')>
+        <cfset spreadsheetAddRow(local.rowAddedExcel,'TITLE,FIRSTNAME,LASTNAME,GENDER,DATEOFBIRTH,ADDRESS,STREET,DISTRICT,STATE,COUNTRY,PINCODE,EMAILID,PHONENUMBER')>
         <cfspreadsheet action = "write" name="local.rowAddedExcel" filename = "../Spreadsheets/plainSpreadSheet.xlsx" overwrite="yes">
     </cffunction>
 

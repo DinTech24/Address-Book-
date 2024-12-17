@@ -6,11 +6,11 @@
     <cfset this.applicationTimeout = createTimeSpan(0, 12, 0, 0)>
     <cfset this.ormEnabled = true>
 
-<!---     <cffunction  name="onError" returnType="void">
+    <cffunction  name="onError" returnType="void">
         <cfargument name="exception" type="string">
         <cfargument name="eventName" type="string">
         <cflocation  url="./errorPage.cfm?error=#arguments.exception#">
-    </cffunction> --->
+    </cffunction>
 
     <cffunction  name="onRequest">
         <cfargument name="requestedPage" required="true">
