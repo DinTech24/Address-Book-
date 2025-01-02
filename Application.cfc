@@ -14,8 +14,13 @@
 
     <cffunction  name="onRequest">
         <cfargument name="requestedPage" required="true">
-        <cfset local.excludedPages = ["/Login.cfm"
-        ,"/signUp.cfm","/errorPage.cfm","/ssoLogin.cfm","/scheduleEmail.cfm"]>
+        <cfset local.excludedPages =[
+                                        "/Login.cfm",
+                                        "/signUp.cfm",
+                                        "/errorPage.cfm",
+                                        "/ssoLogin.cfm",
+                                        "/scheduleEmail.cfm"
+                                    ]>
         <cfif arrayContains(local.excludedPages,arguments.requestedPage)>
             <cfinclude  template="#arguments.requestedPage#">
             <cfelseif structKeyExists(session, "login") AND structKeyExists(session, "username")>

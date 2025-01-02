@@ -313,7 +313,7 @@ function editContact(editId){
     $.ajax({
         type:"POST",
         url:"Component/AddressBookMethods.cfc?method=viewModal",
-        data:{contactIdModal:editId.value},
+        data:{contactIdModal:editId.value,editval:true},
         success:function(result){
             var struct = JSON.parse(result);
             document.getElementById("createContactForm").reset();
@@ -346,6 +346,7 @@ function closeModal(){
     }
     document.getElementById("userWarning").innerHTML =""
     document.getElementById("rolesId").value = ""
+    location.reload()
 }
 
 function pageLogout(){
@@ -386,9 +387,17 @@ function addSpreadSheet(){
             type:"POST",
             url:"Component/AddressBookMethods.cfc?method=SpreadSheet"
         })
-        alert("Spreadsheet downloaded")
+        alert("Data Spreadsheet downloaded")
     }
     
+}
+
+function dwnldPlianExcel(){
+    $.ajax({
+        type:"POST",
+        url:"Component/AddressBookMethods.cfc?method=downloadExcel"
+    })
+    alert("Plain Spreadsheet downloaded")
 }
 
 function uploadSpreadsheet(){
@@ -417,6 +426,7 @@ function closeUploadModal(){
     document.getElementById("uploadForm").reset();
     document.getElementById("uploadWarning").innerHTML = ""
     document.getElementById("disabledExcel").style.display = "none"
+    location.reload()
 }
 
 if ( window.history.replaceState ) {

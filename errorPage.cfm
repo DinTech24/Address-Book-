@@ -9,7 +9,7 @@
 <body>
     <cfoutput>
         <div class="text-center mx-auto mt-5">
-            <img src="./Assets/Images/Error.jpg">
+            <img src="./Assets/Images/Error.png" height="300">
             <div class="fs-1 fw-bold">ERROR OCCURED</div>
             <div class="text-danger fs-4 fw-bold">#url.error#</div>
             <cfset structClear(session)>
