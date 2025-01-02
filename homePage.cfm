@@ -17,7 +17,7 @@
     </head>
     <body>        
         <cfset object = new Component.AddressBookMethods()>
-        <cfset result = object.displayHomepage()>
+        <cfset DisplayObjectResult = object.displayHomepage()>
         <cfset contactResult = object.displayContact()>
         <cfoutput>
             <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -91,8 +91,8 @@
                             <div class="d-flex justify-content-center">
                                 <div class="modalUploadBody">
                                     <div class="d-flex justify-content-end mt-4 me-2">
-                                        <button class="btn btn-primary templateButton" type="submit" onclick="addSpreadSheet()">Template with data</button>
-                                        <button class="btn btn-success templateButton ms-2" name="plainExcel">Plain Template</button>
+                                        <button class="btn btn-primary templateButton" type="button" onclick="addSpreadSheet()">Template with data</button>
+                                        <button class="btn btn-success templateButton ms-2" type="button" onclick="dwnldPlianExcel()" name="plainExcel">Plain Template</button>
                                     </div>
                                     <div class="mt-4">
                                         <span class="uploadFileHead ">Upload Excel File<span>
@@ -173,7 +173,7 @@
                                             <div class="mb-2 createContactFields">Upload Photo </div>
                                         </div>
                                         <div>
-                                            <input  type="text" hidden id="hiddenInput" name="hiddenProfilePic">
+                                            <input  type="text" hidden id="hiddenInput" name="hiddenProfilePic" value="/Assets/Images/addressProfilePic.jpeg">
                                             <input name="profilePic" id="profilePicId" class="editContactPersonalInputFile" type="file">
                                             <div id="picWarning" class="registerWarning"></div>
                                         </div>
@@ -306,12 +306,12 @@
                                             nameConflict="MakeUnique"
                                             result="contactFile">
                                             <cfset profileImage = expandContactPath & contactFile.serverfile>
-                                    </cfif>                                    
-                                    <cfset result = object.addContacts(structure = structure,
-                                                                    profilePic = profileImage)>
+                                    </cfif>
+                                    <cfset structure["profilePic"] = profileImage>
+                                    <cfset result = object.addContacts(structure = structure)>
                             </cfif>
                         </cfif>        
-                        <cfif structKeyExists(form,"editSubmit")>                            
+                        <cfif structKeyExists(form,"editSubmit")>
                             <cfset checkResult = object.checkEditUser(email = form.emailId,
                                                                     phone = form.phone,
                                                                     contactId = form.editSubmit)>
@@ -326,7 +326,7 @@
                                         <cfset Newstructure[item] = form[item]>
                                     </cfloop>
                                     <cfif form.profilePic EQ "">
-                                        <cfset profileImage = "#form.hiddenProfilePic#">
+                                        <cfset Newstructure["profileImage"] = form.hiddenProfilePic>
                                         <cfelse>
                                             <cffile  
                                             action="upload"
@@ -335,9 +335,9 @@
                                             nameConflict="MakeUnique"
                                             result="contactFile">
                                             <cfset profileImage = expandContactPath & contactFile.serverfile>
-                                    </cfif>                                    
-                                    <cfset result = object.editContacts(structure = Newstructure,
-                                                                        profilepic = profileImage)>
+                                            <cfset Newstructure["profileImage"] = profileImage>
+                                    </cfif>
+                                    <cfset object.editContacts(structure = Newstructure)>
                             </cfif>
                         </cfif>
                         <div class="py-2">
@@ -351,8 +351,8 @@
                     <div class="d-flex mt-3">
                         <div class="me-3">
                             <div class="text-center profileBox pt-3">
-                                <img width="100" src="#result.profileImage#" alt="">
-                                <div class="profileUserName">#result.name#</div>
+                                <img width="100" src="#DisplayObjectResult.profileImage#" alt="">
+                                <div class="profileUserName">#DisplayObjectResult.name#</div>
                                 <button data-bs-toggle="modal" onclick="createContact()" data-bs-target="##staticBackdropEdit" class="rounded createContactbutton px-1 py-1">CREATE CONTACT</button>
                                 <button data-bs-toggle="modal" data-bs-target="##staticBackdropUpload" class="rounded createContactbutton px-1 py-1">UPLOAD CONTACT</button>
                             </div>
@@ -383,7 +383,7 @@
                 </div>
                 <div class="col-1"></div>
             </div>
-            <cfif structKeyExists(form,"printPdfCall")>                
+            <cfif structKeyExists(form,"printPdfCall")>
                 <cfset result = object.printPdf()>
                 <cfdocument format="pdf" fileName="PrintedPDFs/#result._createdBy# #dateTimeFormat(now(),'dd-mm-yyy-HH.nn.ss')#.pdf" overwrite="true" orientation = "landscape">
                     <table border = "1"> 
@@ -407,32 +407,28 @@
                         </tr>
                         <cfloop query="#result#">
                             <tr>
-                                <td><img height="30" src="#result.profileImage#"></td> 
-                                <td>#result.title#</td> 
-                                <td>#result.firstName#</td> 
-                                <td>#result.lastName#</td> 
-                                <td>#result.gender#</td> 
-                                <td>#result.dateOfBirth#</td> 
-                                <td>#result.address#</td> 
-                                <td>#result.street#</td> 
-                                <td>#result.district#</td> 
-                                <td>#result.state#</td> 
-                                <td>#result.country#</td> 
-                                <td>#result.pincode#</td> 
-                                <td>#result.emailId#</td> 
-                                <td>#result.phoneNumber#</td> 
-                                <td>#result.roleName#</td> 
-                                <td>#result._createdBy#</td> 
+                                <td><img height="30" src="#result.profileImage#"></td>
+                                <td>#result.title#</td>
+                                <td>#result.firstName#</td>
+                                <td>#result.lastName#</td>
+                                <td>#result.gender#</td>
+                                <td>#result.dateOfBirth#</td>
+                                <td>#result.address#</td>
+                                <td>#result.street#</td>
+                                <td>#result.district#</td>
+                                <td>#result.state#</td>
+                                <td>#result.country#</td>
+                                <td>#result.pincode#</td>
+                                <td>#result.emailId#</td>
+                                <td>#result.phoneNumber#</td>
+                                <td>#result.roleName#</td>
+                                <td>#result._createdBy#</td>
                             </tr> 
                         </cfloop> 
                     </table>
                 </cfdocument>
             </cfif> 
 
-            <cfif structKeyExists(form, "plainExcel")>
-                <cfset uploadResult = object.downloadExcel()>
-            </cfif>
-            
         </cfoutput>
         <script src="./JavaScript/script.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
