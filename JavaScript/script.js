@@ -393,18 +393,30 @@ function addSpreadSheet(){
 
 function uploadSpreadsheet(){
     var spreadsheetVar = document.getElementById("spreadSheetData").files[0];
-    var spreadsheet = new FormData();
-    spreadsheet.append("uploadedSpreadSheet",spreadsheetVar);
-    $.ajax({
-        type:"POST",
-        url:"Component/AddressBookMethods.cfc?method=convertToQuery",
-        data:spreadsheet,
-        contentType:false,
-        processData:false,
-        success:function(){
-            document.getElementById("disabledExcel").style.display = "initial"
-        }
-    })
+    var spreadsheetValue = document.getElementById("spreadSheetData").value;
+    if(spreadsheetValue === ""){
+        document.getElementById("uploadWarning").innerHTML = "Upload .xlsx file"
+    }else{
+        document.getElementById("uploadWarning").innerHTML = ""
+        var spreadsheet = new FormData();
+        spreadsheet.append("uploadedSpreadSheet",spreadsheetVar);
+        $.ajax({
+            type:"POST",
+            url:"Component/AddressBookMethods.cfc?method=convertToQuery",
+            data:spreadsheet,
+            contentType:false,
+            processData:false,
+            success:function(result){
+                document.getElementById("disabledExcel").style.display = "initial"
+            }
+        })
+    }
+}
+
+function closeUploadModal(){
+    document.getElementById("uploadForm").reset();
+    document.getElementById("uploadWarning").innerHTML = ""
+    document.getElementById("disabledExcel").style.display = "none"
 }
 
 if ( window.history.replaceState ) {

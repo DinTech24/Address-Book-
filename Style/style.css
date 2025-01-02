@@ -381,3 +381,9 @@ body{
 .fileUpload{
     width: 15vw;
 }
+
+#uploadWarning{
+    color: crimson;
+    font-size: 12px;
+    font-weight: bold;
+}

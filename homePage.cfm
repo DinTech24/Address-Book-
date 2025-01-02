@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <form method = "POST" type="multipart/form-data">
+            <form id="uploadForm" method = "POST" type="multipart/form-data">
                 <div class="modal fade " id="staticBackdropUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class=" UploadModal modal-content">
@@ -104,9 +104,10 @@
                                             <img src="./Assets/Images/downloadImage.png" height="30" alt="text">
                                         </a>
                                     </div>
+                                    <div id="uploadWarning"></div>
                                     <div class="mt-5">
                                         <button type="button" onclick="uploadSpreadsheet(spreadSheetData)" class="modalBtnUpload px-2 rounded-pill">SUBMIT</button>
-                                        <button type="button" class="px-2 rounded-pill modalUploadClose" data-bs-dismiss="modal" aria-label="Close">CLOSE</button>
+                                        <button type="button" class="px-2 rounded-pill modalUploadClose" data-bs-dismiss="modal" aria-label="Close" onclick="closeUploadModal()">CLOSE</button>
                                     </div>
                                 </div>
                             </div>
